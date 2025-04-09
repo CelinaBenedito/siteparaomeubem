@@ -1,0 +1,16 @@
+{
+  "name": "site-pro-meu-bem",
+  "version": "1.0.0",
+  "main": "mains.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0"
+  }
+}
