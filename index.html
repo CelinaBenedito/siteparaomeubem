@@ -12,7 +12,7 @@
 
 <body>
     <header>
-        <a href="site para o meu bem/registros.html">Registros</a>
+        <a href="registros.html">Registros</a>
         <a href="index.html">Adicionar Registros</a>
     </header>
 
@@ -43,7 +43,7 @@
             <div class="buttons">
                 <button onclick="registrar()">Registrar Gasto</button>
                 <button onclick="adicionar()">Adicionar tipo</button>
-                <a href="site para o meu bem/registros.html">
+                <a href="registros.html">
                     <button>Consultar Registros</button>
                 </a>
 
@@ -56,5 +56,37 @@
         </footer>  
    
 </body>
-
 </html>
+<script>
+    function registrar(){
+        var data = ipt_data.value;
+        var valor = Number(ipt_valor.value);
+        var titulo = ipt_nome.value;
+        var tipo = Number(ipt_tipo.value);
+        var Desc = ipt_desc.value;
+        var nomeTipo;
+        var valida = 0;
+
+        if(data == " " || data == 0){
+                    alert("Data inválida");
+                }
+                else if(valor <= 0){
+                    alert("Valor inválido");
+                }
+                if(titulo !=" "){
+                alert("Valor inválido")
+                }
+
+        for(var i=0; valida<3; i++){
+            if(titulo !=" "){
+                valida++
+            }
+            else if(valor > 0){
+                valida++
+            }
+            else if(data != " " || data != 0){
+                valida++
+            }
+        }
+    }
+</script>

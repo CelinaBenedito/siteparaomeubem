@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="site para o meu bem/style.css">
+    <title>Registros</title>
+</head>
+<body>
+    <header>
+        <a href="registros.html">Registros</a>
+        <a href="index.html">Adicionar Registros</a>
+    </header>
+    <div class="container">
+        <div class="titulo">
+            <h1>Saldo:</h1>
+        </div>
+
+        <div id="div_card" class="card">
+        </div>
+
+        <div class="buttons">
+            <button onclick="adicionarValor()">Adicionar valor</button>
+            <button onclick="Consulta()">Consultar saldo</button>
+        </div>
+       
+    </div>
+
+
+    <div class="buttons">
+        <button>Ver gasto mensal</button>
+        <button>Ver gasto Anual</button> 
+    </div>
+    <footer>
+        <a href="site para o meu bem/teamo.html">Te amo meu bem </a> 
+    </footer>  
+   
+</body>
+</html>
+<script src="site para o meu bem/mains.js"></script>
+<script>
+    function Consulta(){
+        div_card.innerHTML = `
+        <p>o saldo total está no valor de:</p>
+        <div class="saldo"> <p>${saldo}</p></div>
+        `
+    }
+</script>
