@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    <script  type="module" src="mains.js"></script>
-    <link rel="stylesheet" href="site para o meu bem/style.css">
+    <link rel="stylesheet" href="styles/style.css">
     <title>Controle de gastos</title>
 </head>
 
@@ -15,78 +14,136 @@
         <a href="registros.html">Registros</a>
         <a href="index.html">Adicionar Registros</a>
     </header>
-
+    <div class="alerta" id="div_alerta">
+      
+    </div>
     <div class="titulo">
         <h1>Controle de gastos<box-icon name='calendar-heart'></box-icon></h1>
     </div>
 
-        <div class="container">
-            <div class="detalhes">
-                <div class="campo">
-                    <p>Com o que você gastou?</p>
-                    <input type="text" placeholder="ex: Sufgang..." id="ipt_nome">
-                </div>
-                <div class="campo">
-                    <p>Qual o tipo do gasto?</p>
-                    <select id="ipt_tipo">
-                        <option value="1">Comida</option>
-                        <option value="2">Transporte</option>
-                    </select>
-                </div>
+    <div class="container">
+        <div class="detalhes">
+            <div class="campo">
+                <p>Com o que você gastou?</p>
+                <input type="text" placeholder="ex: Sufgang..." id="ipt_nome">
             </div>
-            <p>Quanto foi?</p>
-            <input type="number" placeholder="ex: 120,00" id="ipt_valor">
-            <p>Adicione uma descrição</p>
-            <input type="text" placeholder="ex: Suf basic azul glaceon" id="ipt_desc">
-            <p>Quando foi?</p>
-            <input type="date" id="ipt_data">
-            <div class="buttons">
-                <button onclick="registrar()">Registrar Gasto</button>
-                <button onclick="adicionar()">Adicionar tipo</button>
-                <a href="registros.html">
-                    <button>Consultar Registros</button>
-                </a>
-
+            <div class="campo">
+                <p>Qual o tipo do gasto?</p>
+                <select id="select_tipo">
+                    <option value="1">Comida</option>
+                    <option value="2">Transporte</option>
+                </select>
             </div>
         </div>
+        <p>Quanto foi?</p>
+        <input type="number" placeholder="ex: 120,00" id="ipt_valor">
+        <p>Adicione uma descrição</p>
+        <input type="text" placeholder="ex: Suf basic azul glaceon" id="ipt_desc">
+        <p>Quando foi?</p>
+        <input type="date" id="ipt_data">
+        <div class="buttons">
+            <button onclick="registrar()">Registrar Gasto</button>
+            <button onclick="adicioarTipo.showModal()">Adicionar tipo</button>
+            <dialog id="adicioarTipo">
+                <h1>Adicionar novo tipo</h1>
+                <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
+                <button>Adicionar</button>
+            </dialog>
+            <a href="registros.html">
+                <button onclick="adicioarTipos()">Consultar Registros</button>
+            </a>
+
+        </div>
     </div>
-    
-       <footer>
-           <a href="site para o meu bem/teamo.html">Te amo meu bem </a> 
-        </footer>  
-   
+    </div>
+
+    <footer>
+        <a href="site para o meu bem/teamo.html">Te amo meu bem </a>
+    </footer>
+
 </body>
+
 </html>
 <script>
-    function registrar(){
+
+    function alerta(texto){
+        div_alerta.innerHTML = 
+        `
+        ${texto}
+        `
+    }
+    function gerarTipos() {
+        for (let c = 0; json.length > c; c++) {
+            select_tipo.innerHTML +=
+                `
+            <option value-"${c + 1}">${json.titulo}</option>
+            `
+        }
+    }
+
+    function registrar() {
         var data = ipt_data.value;
         var valor = Number(ipt_valor.value);
         var titulo = ipt_nome.value;
-        var tipo = Number(ipt_tipo.value);
+        var tipo = Number(select_tipo.value);
         var Desc = ipt_desc.value;
-        var nomeTipo;
         var valida = 0;
 
-        if(data == " " || data == 0){
-                    alert("Data inválida");
-                }
-                else if(valor <= 0){
-                    alert("Valor inválido");
-                }
-                if(titulo !=" "){
-                alert("Valor inválido")
-                }
+        console.log('Cliquei em registrar')
 
-        for(var i=0; valida<3; i++){
-            if(titulo !=" "){
-                valida++
-            }
-            else if(valor > 0){
-                valida++
-            }
-            else if(data != " " || data != 0){
-                valida++
-            }
+        if(Desc == "" || Desc == false){
+            Desc = "Nenhuma descrição fornecida"
         }
+
+        if (data == false || data == 0) {
+            return alert("Data inválida");
+        }
+        else if (valor <= 0) {
+           return alert("Valor inválido");
+        }
+        if (titulo == "") {
+            return alert("Titulo inválido")
+        }
+
+        fetch("/registros/registrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                valorServer: valor,
+                descServer: Desc,
+                tipoServer: tipo,
+                tituloServer: titulo,
+                dataServer: data
+            }),
+        }).then((response) =>  {
+            console.log("Resposta:", response);
+            if (response.ok) {
+                return alerta(`  Registro realizado com sucesso <br>
+        <a href="registros.html">
+            <button>Ver registros</button>
+        </a>
+    
+        <button onclick='window.location.reload()'>Continuar a registrar</button>`);
+            }
+            else{
+                alert("Houve um erro ao registrar", response)
+            }
+        })
+
+    }
+
+    function adicioarTipos(){
+        var titulo = ipt_tituloTipo.value
+        fetch("/registros/adicionarTipo",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                tituloServer: titulo
+            })
+        })
     }
 </script>
