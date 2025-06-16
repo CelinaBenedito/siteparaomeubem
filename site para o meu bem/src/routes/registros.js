@@ -14,4 +14,9 @@ router.post("/adicionarTipo", function(req,res){
     console.log("Estou no router Adicionar tipos");
 });
 
+router.get("/gerarTipos", function(req,res){
+    registrosController.gerarTipos(req,res);
+    console.log("Entrei no router gerar tipos")
+})
+
 module.exports = router;

@@ -21,7 +21,17 @@ function adicionarTipo(titulo) {
 
 }
 
+function gerarTipos(){
+    console.log("---------Emtrei no model gerar tipos---------")
+    var instrucao = 
+    `
+    select * from tipo;
+    `
+    return database.executar(instrucao)
+}
+
 module.exports = {
     registrar,
-    adicionarTipo
+    adicionarTipo,
+    gerarTipos
 }

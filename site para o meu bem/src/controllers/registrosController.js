@@ -29,7 +29,19 @@ var titulo = req.body.tituloServer;
     })
 }
 
+function gerarTipos(req,res){
+    registrosModel.gerarTipos()
+    .then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Geração concluida", resposta);
+    }).catch(function(erro){
+        console.error("Houve um erro ao regitrar", erro);
+        res.status(500).json(erro.sqlMessage)
+    })
+}
+
 module.exports = {
 registrar,
-adicionarTipo
+adicionarTipo,
+gerarTipos
 }

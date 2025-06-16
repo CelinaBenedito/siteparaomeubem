@@ -9,13 +9,13 @@
     <title>Controle de gastos</title>
 </head>
 
-<body>
+<body onload="gerarTipos()">
     <header>
         <a href="registros.html">Registros</a>
         <a href="index.html">Adicionar Registros</a>
     </header>
     <div class="alerta" id="div_alerta">
-      
+
     </div>
     <div class="titulo">
         <h1>Controle de gastos<box-icon name='calendar-heart'></box-icon></h1>
@@ -47,10 +47,10 @@
             <dialog id="adicioarTipo">
                 <h1>Adicionar novo tipo</h1>
                 <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
-                <button>Adicionar</button>
+                <button onclick="adicioarTipos()">Adicionar</button>
             </dialog>
             <a href="registros.html">
-                <button onclick="adicioarTipos()">Consultar Registros</button>
+                <button>Consultar Registros</button>
             </a>
 
         </div>
@@ -66,19 +66,29 @@
 </html>
 <script>
 
-    function alerta(texto){
-        div_alerta.innerHTML = 
-        `
+    function alerta(texto) {
+        div_alerta.style.display = ""
+        div_alerta.innerHTML =
+            `
         ${texto}
         `
     }
     function gerarTipos() {
-        for (let c = 0; json.length > c; c++) {
-            select_tipo.innerHTML +=
-                `
-            <option value-"${c + 1}">${json.titulo}</option>
+        select_tipo.innerHTML = "<option value='#'>Escolha um tipo</option>"
+        fetch("/registros/gerarTipos", {
+            method: "GET"
+        }).then(res => {
+            res.json().then(json => {
+                for (let c = 0; json.length > c; c++) {
+                    
+                    select_tipo.innerHTML +=
+                        `
+            <option value"${c + 1}">${json[c].titulo}</option>
             `
-        }
+                }
+            })
+        })
+
     }
 
     function registrar() {
@@ -91,19 +101,23 @@
 
         console.log('Cliquei em registrar')
 
-        if(Desc == "" || Desc == false){
+        if (Desc == "" || Desc == false) {
             Desc = "Nenhuma descrição fornecida"
         }
 
         if (data == false || data == 0) {
             return alert("Data inválida");
         }
-        else if (valor <= 0) {
-           return alert("Valor inválido");
+        if (valor <= 0) {
+            return alert("Valor inválido");
         }
         if (titulo == "") {
             return alert("Titulo inválido")
         }
+        if(tipo == '#'){
+            return alert("Escolha um tipo")
+        }
+
 
         fetch("/registros/registrar", {
             method: "POST",
@@ -117,7 +131,7 @@
                 tituloServer: titulo,
                 dataServer: data
             }),
-        }).then((response) =>  {
+        }).then((response) => {
             console.log("Resposta:", response);
             if (response.ok) {
                 return alerta(`  Registro realizado com sucesso <br>
@@ -127,23 +141,33 @@
     
         <button onclick='window.location.reload()'>Continuar a registrar</button>`);
             }
-            else{
+            else {
                 alert("Houve um erro ao registrar", response)
             }
         })
 
     }
 
-    function adicioarTipos(){
+    function adicioarTipos() {
         var titulo = ipt_tituloTipo.value
-        fetch("/registros/adicionarTipo",{
+        fetch("/registros/adicionarTipo", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 tituloServer: titulo
-            })
+            }),
+        }).then(function (resposta) {
+            console.log("Resposta: ", resposta);
+            if (resposta.ok) {
+                gerarTipos();
+                return alerta(`Tipo adicionado com sucesso!
+                <button onclick="div_alerta.style.display='none'">OK</button>`)
+            }
+            else {
+                return alerta(`Houver um erro ao adicionar tipo`, resposta)
+            }
         })
     }
 </script>
