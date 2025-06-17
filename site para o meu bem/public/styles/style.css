@@ -148,7 +148,8 @@ select {
     margin-bottom: -12px;
     width: 150px;
 }
-.alerta{
+
+.alerta {
     top: 50%;
     border: #50B4BF 2px solid;
     border-radius: 10px;
@@ -165,13 +166,38 @@ select {
     text-align: center;
     padding: 10px;
 }
-.alerta button{
+
+.modal {
+    border: #50B4BF 2px solid;
+    border-radius: 10px;
+    background-color: #b4d9d57c;
+    backdrop-filter: blur(8px);
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+.modal button,
+.alerta button {
     margin-top: 10px;
     border-radius: 10px;
     border: #367373 2px solid;
     background-color: transparent;
     padding: 10px;
 }
+
 a {
     text-decoration: none;
+}
+
+.pesquisa {
+    cursor: pointer;
+}
+.principal{
+    display: grid;
+    grid-template-columns: 50% 50%
+}
+.principal .textoValor{
+    font-size:20px;
+    text-shadow: #B4D9D5 2px 0 5px;
 }

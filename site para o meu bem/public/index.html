@@ -54,7 +54,7 @@
         <div class="buttons">
             <button onclick="registrar()">Registrar Gasto</button>
             <button onclick="adicioarTipo.showModal()">Adicionar tipo</button>
-            <dialog id="adicioarTipo">
+            <dialog id="adicioarTipo" class="modal">
                 <h1>Adicionar novo tipo</h1>
                 <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
                 <button onclick="adicioarTipos()">Adicionar</button>
@@ -175,7 +175,7 @@
                         <a href="registros.html">
                             <button>Ver registros</button>
                         </a>
-                        
+
                         <button onclick='window.location.reload()'>Continuar a registrar</button>
                     `
                 ),3000);
@@ -224,7 +224,8 @@
             console.log("Resposta: ", resposta);
             if (resposta.ok) {
                 gerarTipos();
-                return alerta(`Tipo adicionado com sucesso!
+                adicioarTipo.close();
+                return alerta(`Tipo adicionado com sucesso!<br>
                 <button onclick="div_alerta.style.display='none'">OK</button>`)
             }
             else {

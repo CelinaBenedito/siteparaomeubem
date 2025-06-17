@@ -26,21 +26,29 @@
             <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
             <button onclick="consultaSaldo.showModal(),Consulta()">Consultar saldo</button>
         </div>
-        <dialog id="addValor">
+        <dialog id="addValor" class="modal">
             <h1>Adicione um valor</h1>
             <input type="number" id="ipt_valor">
             <select id="select_instituicao">
             </select>
-            <button onclick="addValor.close()">Cancelar</button><button onclick="adicionar()">Salvar</button>
+            <br>
+            <div>
+                <button onclick="addValor.close()">Cancelar</button>
+                <button onclick="adicionar()">Salvar</button>
+            </div>
         </dialog>
-        <dialog id="removeValor">
+        <dialog id="removeValor" class="modal">
             <h1>Remover um valor</h1>
             <input type="number" id="ipt_remove">
             <select id="select_instituicao_remove">
             </select>
-            <button onclick="removeValor.close()">Cancelar</button><button onclick="remover()">Salvar</button>
+            <br>
+            <div>
+                <button onclick="removeValor.close()">Cancelar</button>
+                <button onclick="remover()">Salvar</button>
+            </div>
         </dialog>
-        <dialog id="consultaSaldo">
+        <dialog id="consultaSaldo" class="modal">
             <div class="principal" id="principal">
 
             </div>
@@ -53,7 +61,8 @@
         <button>Ver gasto mensal</button>
         <button>Ver gasto Anual</button>
     </div>
-    <div id="containerRegistros" class="containerRegistros" style="display: grid; grid-template-columns: 70% 30%; width: 100%;">
+    <div id="containerRegistros" class="containerRegistros"
+        style="display: grid; grid-template-columns: 70% 30%; width: 100%;">
         <div class="separacao">
             <h1>Registros</h1>
             <div class="registros" id="registros">
@@ -61,15 +70,21 @@
         </div>
         <div>
             <h3>Filtros</h3>
-            <h4>Tipo</h4>
-            <h4>Instituição</h4>
-            <h4>Data</h4>
+            <a class="pesquisa" onclick="">
+                <h4>Tipo</h4>
+            </a>
+            <a class="pesquisa" onclick="">
+                <h4>Instituição</h4>
+            </a>
+            <a class="pesquisa" onclick="">
+                <h4>Data</h4>
+            </a>
 
         </div>
 
     </div>
     <div class="divimgGlaceonCostas">
-    <img class="imgGlaceonCostas" src="assets/gif/glaceon de costas.gif" alt="">
+        <img class="imgGlaceonCostas" src="assets/gif/glaceon de costas.gif" alt="">
     </div>
     <footer>
         <a href="teamo.html">Te amo meu bem </a>
@@ -80,29 +95,29 @@
 </html>
 <script>
 
-    function carregarRegistros(){
-        fetch("/registros/carregarRegistros",{
+    function carregarRegistros() {
+        fetch("/registros/carregarRegistros", {
             method: "GET"
-        }).then(res=> {
-            res.json().then(json=>{
-                 registros.innerHTML = 
+        }).then(res => {
+            res.json().then(json => {
+                registros.innerHTML =
                     `
                         <div class="cabecalho">
                             <div class="item">Nome gasto</div> 
-                            <div class="item"> descrição gasto </div>
+                            <div class="item"> Descrição gasto </div>
                             <div class="item"> Valor</div> 
                             <div class="item"> Tipo do gasto</div> 
                             <div class="item"> Instituição</div> 
                             <div class="item"> Data do gasto</div>
                         </div>
                     `
-                for(let c = 0; json.length > c; c++){
+                for (let c = 0; json.length > c; c++) {
                     const data = new Date(json[c].dataGasto)
                     const dataFormatada = data.toLocaleDateString("pt-BR")
-            
-                   
-                    registros.innerHTML += 
-                    `
+
+
+                    registros.innerHTML +=
+                        `
                     <div class="cardRegistro">
                      <div class="item">${json[c].tituloGasto}</div>
                      <div class="item">${json[c].descricao}</div>
@@ -200,9 +215,12 @@
             res.json().then(json => {
                 for (let c = 0; json.length > c; c++) {
                     principal.innerHTML +=
-                        `
+                        `<div>
                             <h1>${json[c].nome}</h1>
-                            <p>${json[c].valor}</p>
+                            <div class="textoValor">
+                                <p>${json[c].valor}</p>
+                            </div>
+                            </div>
                         `
                 }
             })
