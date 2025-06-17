@@ -1,48 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/style.css">
     <title>Registros</title>
 </head>
-<body>
+
+<body onload="carregarRegistros()">
     <header>
         <a href="registros.html">Registros</a>
         <a href="index.html">Adicionar Registros</a>
     </header>
     <div class="container">
         <div class="titulo">
-            <h1>Saldo:</h1>
+            <h3>Saldo total:</h3>
         </div>
 
-        <div id="div_card" class="card">
-        </div>
+        <p id="ValorTotal"></p>
+
 
         <div class="buttons">
-            <button onclick="adicionarValor()">Adicionar valor</button>
-            <button onclick="Consulta()">Consultar saldo</button>
+            <button onclick="addValor.showModal(), gerarInstituicao()">Adicionar valor</button>
+            <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
+            <button onclick="consultaSaldo.showModal(),Consulta()">Consultar saldo</button>
         </div>
-       
+        <dialog id="addValor">
+            <h1>Adicione um valor</h1>
+            <input type="number" id="ipt_valor">
+            <select id="select_instituicao">
+            </select>
+            <button onclick="addValor.close()">Cancelar</button><button onclick="adicionar()">Salvar</button>
+        </dialog>
+        <dialog id="removeValor">
+            <h1>Remover um valor</h1>
+            <input type="number" id="ipt_remove">
+            <select id="select_instituicao_remove">
+            </select>
+            <button onclick="removeValor.close()">Cancelar</button><button onclick="remover()">Salvar</button>
+        </dialog>
+        <dialog id="consultaSaldo">
+            <div class="principal" id="principal">
+
+            </div>
+        </dialog>
+
     </div>
 
 
     <div class="buttons">
         <button>Ver gasto mensal</button>
-        <button>Ver gasto Anual</button> 
+        <button>Ver gasto Anual</button>
+    </div>
+    <div id="containerRegistros" class="containerRegistros" style="display: grid; grid-template-columns: 70% 30%; width: 100%;">
+        <div class="separacao">
+            <h1>Registros</h1>
+            <div class="registros" id="registros">
+            </div>
+        </div>
+        <div>
+            <h3>Filtros</h3>
+            <h4>Tipo</h4>
+            <h4>Instituição</h4>
+            <h4>Data</h4>
+
+        </div>
+
+    </div>
+    <div class="divimgGlaceonCostas">
+    <img class="imgGlaceonCostas" src="assets/gif/glaceon de costas.gif" alt="">
     </div>
     <footer>
-        <a href="site para o meu bem/teamo.html">Te amo meu bem </a> 
-    </footer>  
-   
+        <a href="teamo.html">Te amo meu bem </a>
+    </footer>
+
 </body>
+
 </html>
-<script src="site para o meu bem/mains.js"></script>
 <script>
-    function Consulta(){
-        div_card.innerHTML = `
-        <p>o saldo total está no valor de:</p>
-        <div class="saldo"> <p>${saldo}</p></div>
-        `
+
+    function carregarRegistros(){
+        fetch("/registros/carregarRegistros",{
+            method: "GET"
+        }).then(res=> {
+            res.json().then(json=>{
+                 registros.innerHTML = 
+                    `
+                        <div class="cabecalho">
+                            <div class="item">Nome gasto</div> 
+                            <div class="item"> descrição gasto </div>
+                            <div class="item"> Valor</div> 
+                            <div class="item"> Tipo do gasto</div> 
+                            <div class="item"> Instituição</div> 
+                            <div class="item"> Data do gasto</div>
+                        </div>
+                    `
+                for(let c = 0; json.length > c; c++){
+                    const data = new Date(json[c].dataGasto)
+                    const dataFormatada = data.toLocaleDateString("pt-BR")
+            
+                   
+                    registros.innerHTML += 
+                    `
+                    <div class="cardRegistro">
+                     <div class="item">${json[c].tituloGasto}</div>
+                     <div class="item">${json[c].descricao}</div>
+                     <div class="item">${json[c].valor}</div>
+                     <div class="item">${json[c].tituloTipo}</div>
+                     <div class="item">${json[c].nomeInstituicao}</div>
+                     <div class="item">${dataFormatada}</div>
+                    </div>
+
+                    `
+                }
+            })
+        })
+    }
+
+    function adicionar() {
+        var valor = ipt_valor.value;
+        var instituicao = select_instituicao.value;
+        fetch("/registros/adicionarSaldo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                valorServer: valor,
+                instituicaoServer: instituicao
+            })
+        }).then((resposta) => {
+            console.log("Resposta:", resposta);
+            if (resposta.ok) {
+                console.log("Saldo atualizado")
+                return window.location.reload()
+            }
+            else {
+                console.error("Houver um erro ao atualizar o saldo", resposta)
+            }
+        });
+    }
+    function remover() {
+        var valor = ipt_remove.value;
+        var instituicao = select_instituicao_remove.value;
+        fetch("/registros/atualizarSaldo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                valorServer: valor,
+                instituicaoServer: instituicao
+            })
+        }).then((resposta) => {
+            console.log("Resposta:", resposta);
+            if (resposta.ok) {
+                console.log("Saldo atualizado")
+                return window.location.reload()
+            }
+            else {
+                console.error("Houver um erro ao atualizar o saldo", resposta)
+            }
+        });
+    }
+
+    function gerarInstituicao() {
+        select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
+        fetch("/registros/gerarInstituicoes", {
+            method: "GET"
+        }).then(res => {
+            res.json().then(json => {
+                for (let c = 0; json.length > c; c++) {
+                    select_instituicao_remove.innerHTML +=
+                        `
+                            <option value="${json[c].id}">${json[c].nome}</option>
+                    `
+                    select_instituicao.innerHTML +=
+                        `
+                            <option value="${json[c].id}">${json[c].nome}</option>
+                        `
+                }
+            })
+        })
+    }
+    fetch("/registros/mostrarSaldoTotal", {
+        method: "GET"
+    }).then(res => {
+        res.json().then(json => {
+            ValorTotal.innerHTML = json[0].valorTotal
+        })
+    })
+
+    function Consulta() {
+        principal.innerHTML = "    "
+        fetch("/registros/mostrarTodasInstituicoes", {
+            method: "GET"
+        }).then(res => {
+            res.json().then(json => {
+                for (let c = 0; json.length > c; c++) {
+                    principal.innerHTML +=
+                        `
+                            <h1>${json[c].nome}</h1>
+                            <p>${json[c].valor}</p>
+                        `
+                }
+            })
+        })
+
+
     }
 </script>
