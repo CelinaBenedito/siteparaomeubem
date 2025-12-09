@@ -1,236 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
-    <title>Controle de gastos</title>
+    <title>Bem Vindo!</title>
+    <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="styles/Estilos.css">
 </head>
-
-<body onload="gerarTipos(),gerarInstituicao()">
-    <header>
-        <a href="registros.html">Registros</a>
-        <a href="index.html">Adicionar Registros</a>
-    </header>
-    <div class="alerta" id="div_alerta">
-
-    </div>
-    <div class="titulo">
-        <h1>Controle de gastos<box-icon name='calendar-heart'></box-icon></h1>
-    </div>
-    <div class="glaceonFofinhaDivimg">
-    <img src="assets/gif/glaceon fofinha.gif" alt="">
-
-    </div>
-    <div class="container">
-        <div class="detalhes">
-            <div class="campo">
-                <p>Com o que você gastou?</p>
-                <input type="text" placeholder="ex: Sufgang..." id="ipt_nome">
-            </div>
-            <div class="campo">
-                <p>Qual o tipo do gasto?</p>
-                <select id="select_tipo">
-                </select>
-            </div>
-        </div>
-         <div class="detalhes">
-              <div class="campo">
-        <p>Quanto foi?</p>
-        <input type="number" placeholder="ex: 120,00" id="ipt_valor">
-        </div>
-          <div class="campo">
-              <p>Qual instituição?</p>
-              <select id="select_instituicao">
-              </select>
-          </div>
-        </div>
-        <p>Adicione uma descrição</p>
-        <input type="text" placeholder="ex: Suf basic azul glaceon" id="ipt_desc">
-        <p>Quando foi?</p>
-        <input type="date" id="ipt_data">
-        <div class="buttons">
-            <button onclick="registrar()">Registrar Gasto</button>
-            <button onclick="adicioarTipo.showModal()">Adicionar tipo</button>
-            <dialog id="adicioarTipo" class="modal">
-                <h1>Adicionar novo tipo</h1>
-                <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
-                <button onclick="adicioarTipos()">Adicionar</button>
-            </dialog>
-            <a href="registros.html">
-                <button>Consultar Registros</button>
-            </a>
-
+<body>
+    <div class="containerGeral" id="containerGeral">
+        <nav class="side-bar">
+            <ul>
+                <li onclick="sidebarFunction()">
+                    <i class='bx  bx-menu-closer'></i> 
+                </li>
+                <li>
+                    <i class='bx  bx-home'></i> <a href="index.html" id="home">Home</a>
+                </li>
+                <li>
+                    <i class='bx  bx-address-book'></i> <a href="registros.html" id="reg">Registros</a>
+                </li>
+                <li>
+                    <i class='bx  bx-file-plus'></i> <a href="adicinarRegistros.html" id="add">Adicionar Registros</a>
+                </li>
+                <li>
+                    <i class='bx  bx-calendar-event'></i> <a href="" id="agenda"> Agenda</a>
+                </li>
+            </ul>
+            
+            
+            
+        </nav>
+        <!-- Conteudo do site -->
+        <div>
+            <h1>Bem Vindo!</h1>
         </div>
     </div>
-    </div>
-
-    <footer>
-        <a href="teamo.html">Te amo meu bem </a>
-    </footer>
-
 </body>
-
 </html>
-<script>
-    div_alerta.style.display = 'none';
-
-    function alerta(texto) {
-        div_alerta.style.display = ""
-        div_alerta.innerHTML =
-            `
-        ${texto}
-        `
-    }
-    function gerarTipos() {
-        select_tipo.innerHTML = "<option value='#'>Escolha um tipo</option>"
-        fetch("/registros/gerarTipos", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
-
-                    select_tipo.innerHTML +=
-                        `
-                            <option value="${json[c].id}">${json[c].titulo}</option>
-                        `
-                }
-            })
-        })
-    }
-
-    function gerarInstituicao() {
-        select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
-        fetch("/registros/gerarInstituicoes", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
-                    select_instituicao.innerHTML +=
-                        `
-                            <option value="${json[c].id}">${json[c].nome}</option>
-                        `
-                }
-            })
-        })
-    }
-
-    function registrar() {
-        var data = ipt_data.value;
-        var valor = Number(ipt_valor.value);
-        var titulo = ipt_nome.value;
-        var tipo = select_tipo.value;
-        var Desc = ipt_desc.value;
-        var instituicao = select_instituicao.value
-
-        console.log('Cliquei em registrar')
-
-        if (Desc == "" || Desc == false) {
-            Desc = "Nenhuma descrição fornecida"
-        }
-        if (data == false || data == 0) {
-            return alert("Data inválida");
-        }
-        if (valor <= 0) {
-            return alert("Valor inválido");
-        }
-        if (titulo == "") {
-            return alert("Titulo inválido");
-        }
-        if (tipo == '#') {
-            return alert("Escolha um tipo");
-        }
-        if (instituicao == '#') {
-            return alert("Escolha uma instituição");
-        }
-
-        setTimeout(alerta(`Registrando...
-        <div class="glaceonCorrendoDiv">
-    <img class="glaceon correndo" src="/assets/gif/glaceon-correndo-unscreen.gif" alt="">
-    </div>
-        `),2000)
-
-        fetch("/registros/registrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                descServer: Desc,
-                tipoServer: tipo,
-                tituloServer: titulo,
-                dataServer: data,
-                instituicaoServer: instituicao
-            }),
-        }).then((response) => {
-            console.log("Resposta:", response);
-            if (response.ok) {
-                atualizarSaldo(valor, instituicao);
-                return setTimeout(()=>alerta(
-                    `  
-                        Registro realizado com sucesso! <br>
-                        <a href="registros.html">
-                            <button>Ver registros</button>
-                        </a>
-
-                        <button onclick='window.location.reload()'>Continuar a registrar</button>
-                    `
-                ),3000);
-              
-            }
-            else {
-                alert("Houve um erro ao registrar", response)
-            }
-        });
-
-    }
-
-    function atualizarSaldo(valor, instituicao) {
-        console.log("chamou atualizar saldo")
-        fetch(`/registros/atualizarSaldo`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                instituicaoServer: instituicao
-            }),
-        }).then((resposta)=>{
-            console.log("Resposta:", resposta);
-            if(resposta.ok){
-                return console.log("Saldo atualizado")
-            }
-            else{
-                console.error("Houver um erro ao atualizar o saldo", resposta)
-            }
-        });
-    }
-
-    function adicioarTipos() {
-        var titulo = ipt_tituloTipo.value
-        fetch("/registros/adicionarTipo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                tituloServer: titulo
-            }),
-        }).then(function (resposta) {
-            console.log("Resposta: ", resposta);
-            if (resposta.ok) {
-                gerarTipos();
-                adicioarTipo.close();
-                return alerta(`Tipo adicionado com sucesso!<br>
-                <button onclick="div_alerta.style.display='none'">OK</button>`)
-            }
-            else {
-                return alerta(`Houver um erro ao adicionar tipo`, resposta)
-            }
-        })
-    }
-</script>
+<script src="js/index.js"></script>
