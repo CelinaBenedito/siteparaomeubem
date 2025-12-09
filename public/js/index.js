@@ -1,5 +1,5 @@
 
-document.getElementById("containerGeral").style.gridTemplateColumns = "5% 90%"
+document.getElementById("navbar").style.width = "70px"
 home.style.display = "none"
 reg.style.display = "none"
 add.style.display = "none"
@@ -8,7 +8,9 @@ agenda.style.display = "none"
 function sidebarFunction() {
     c = 0;
     if (c == 1) {
-        document.getElementById("containerGeral").style.gridTemplateColumns = "5% 90%"
+        document.getElementById("navbar").style.gridTemplateColumns = "5% 90%"
+        document.getElementById("main").style.marginLeft = "50px";
+
         home.style.display = "none"
         reg.style.display = "none"
         add.style.display = "none"

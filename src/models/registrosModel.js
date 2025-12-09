@@ -1,4 +1,3 @@
-const { DatabaseSync } = require("node:sqlite");
 var database = require("../database/config");
 
 function registrar(valor, desc, tipo, titulo, data, instituicao) {

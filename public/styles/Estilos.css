@@ -21,6 +21,15 @@ box-sizing: border-box;
     flex-direction: column;
     background-color: aqua;
     height: 100vh;
+    position: fixed;
+    overflow-x: hidden;
+     transition: 0.5s;
+     z-index: 1;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
 }
 
 .side-bar ul{
@@ -32,5 +41,7 @@ box-sizing: border-box;
     gap: 20px;
 }
 .side-bar a{
+    display: block;
    text-decoration: none;
+   transition: 0.3s;
 }
