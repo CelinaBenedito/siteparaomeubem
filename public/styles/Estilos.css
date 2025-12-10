@@ -1,47 +1,109 @@
-*{
-margin: 0;
-padding: 0;
-border: 0;
-box-sizing: border-box;
+:root {
+
+    --teal-claro: #B4D9D5;
+    --teal-escuro: #367373;
+
+    --cor-fundo-pagina: #EBF4F4;
+    --cor-fundo-card: #FFFFFF;
+    --cor-texto-claro: #FFFFFF;
+    --cor-texto-escuro: #1A1A1A;
+    --cor-texto-secundario: #4A4A4A;
 }
 
-.containerGeral{
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+.containerGeral {
     display: grid;
-    grid-template-columns: 15% 80%;
+    display: flex;
     gap: 15px;
+    background-color: var(--cor-fundo-pagina);
+    color: var(--cor-texto-escuro);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.containerGeral button{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--teal-escuro);
+    color: var(--cor-texto-claro);
+    margin: 10px 0px;
 }
 
-.side-bar{
+.side-bar {
     padding: 20px;
     gap: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bolder;
-    font-size:23px;
+    font-size: 23px;
     display: flex;
     flex-direction: column;
-    background-color: aqua;
+    background-color: var(--teal-escuro);
     height: 100vh;
     position: fixed;
     overflow-x: hidden;
-     transition: 0.5s;
-     z-index: 1;
+    transition: 0.5s;
+    z-index: 1;
+    color: var(--cor-texto-claro);
 }
 
 #main {
-  transition: margin-left .5s;
-  padding: 20px;
+    transition: margin-left .5s;
+    padding: 20px;
+    flex-grow: 1; 
+    width: auto; 
 }
 
-.side-bar ul{
+
+.side-bar ul {
     flex-wrap: wrap;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     list-style: none;
     gap: 20px;
+    width: 250px;
 }
-.side-bar a{
+
+.side-bar li {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.side-bar a {
     display: block;
-   text-decoration: none;
-   transition: 0.3s;
+    text-decoration: none;
+    transition: 0.3s;
+    color: var(--cor-texto);
+
 }
+.containerKPIS{
+    display: flex;
+    position: relative;
+}
+
+.KPI {
+    position: relative;
+    border-radius: 10px;
+    margin: 20px;
+    background-color: var(--cor-fundo-card);
+    padding: 15px;
+    box-shadow: 2px 2px 5px var(--cor-texto-secundario);
+}
+.containerGraficos{
+    display: grid;
+    grid-template-columns: 45% 45%;
+    gap: 5%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+#graficoDonut{
+    z-index: 100;
+    position: relative;
+}
+

@@ -1,41 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem Vindo!</title>
+    <title>Home</title>
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="styles/Estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="containerGeral" id="containerGeral">
+
+<body onload="gerarKPIS()">
+    <div class="containerGeral">
         <nav class="side-bar" id="navbar">
             <ul>
                 <li onclick="sidebarFunction()">
-                    <i class='bx  bx-menu-closer'></i> 
+                    <i class='bx  bx-menu-closer'></i>
                 </li>
                 <li>
-                    <i class='bx  bx-home'></i> <a href="index.html" id="home">Home</a>
+                    <a href="index.html"> <i class='bx  bx-home'></i> <span id="home">Home</span></a>
                 </li>
                 <li>
-                    <i class='bx  bx-address-book'></i> <a href="registros.html" id="reg">Registros</a>
+                    <a href="registros.html"> <i class='bx  bx-address-book'></i> <span id="reg"> Registros </span></a>
                 </li>
                 <li>
-                    <i class='bx  bx-file-plus'></i> <a href="adicinarRegistros.html" id="add">Adicionar Registros</a>
+                    <a href="adicinarRegistros.html"> <i class='bx  bx-file-plus'></i> <span id="add">Adicionar
+                            Registros</span></a>
                 </li>
                 <li>
-                    <i class='bx  bx-calendar-event'></i> <a href="" id="agenda"> Agenda</a>
+                    <a href=""><i class='bx  bx-calendar-event'></i> <span id="agenda">Agenda</span></a>
                 </li>
             </ul>
-            
-            
-            
         </nav>
+
         <!-- Conteudo do site -->
-        <div id="main">
+        <div id="main" class="main">
             <h1>Bem Vindo!</h1>
+            <button>Ver instituições</button>
+            <div class="containerKPIS" id="containerKPIS">
+                <div class="KPI">
+                    <p>Total gasto no crédito:</p>
+                    <p><span>R$10,00</span></p>
+                </div>
+                <div class="KPI">
+                    <p>Total acumulado no débito:</p>
+                    <p><span>R$10,00</span></p>
+                </div>
+                <div class="KPI">
+                    <p>Total de dinheiro por tipo</p>
+                    <div id="graficoDonut" class="grafico"></div>
+
+                </div>
+            </div>
+            <div class="containerGraficos">
+                <div id="graficoTipo" class="grafico"></div>
+                <div id="graficoTemporal" class="grafico"></div>
+
+            </div>
         </div>
     </div>
 </body>
+
 </html>
 <script src="js/index.js"></script>
