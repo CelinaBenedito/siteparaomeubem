@@ -1,0 +1,46 @@
+const navbar = document.getElementById("navbar");
+const main = document.getElementById("main");
+const home = document.getElementById("home");
+const reg = document.getElementById("reg");
+const add = document.getElementById("add");
+const agenda = document.getElementById("agenda");
+
+let ativo = false;
+
+navbar.style.width = "70px";
+home.style.display = "none";
+reg.style.display = "none";
+add.style.display = "none";
+agenda.style.display = "none";
+main.style.marginLeft = "70px";
+
+function sidebarFunction() {
+    console.log("Entrei na funciton", ativo)
+    if (!ativo) {
+
+        ativo = true;
+
+        navbar.style.width = "290px";
+        main.style.marginLeft = "290px";
+        home.style.display = "";
+        reg.style.display = "";
+        add.style.display = "";
+        agenda.style.display = "";
+
+        console.log("Abriu", ativo);
+
+    } else {
+        ativo = false;
+
+        navbar.style.width = "70px";
+        main.style.marginLeft = "70px";
+        home.style.display = "none";
+        reg.style.display = "none";
+        add.style.display = "none";
+        agenda.style.display = "none";
+
+        console.log("Fechou", ativo);
+    }
+
+
+}

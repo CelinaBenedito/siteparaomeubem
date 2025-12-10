@@ -5,15 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
+    <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="styles/Estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Controle de gastos</title>
 </head>
 
 <body onload="gerarTipos(),gerarInstituicao()">
-    <header>
-        <a href="registros.html">Registros</a>
-        <a href="adicinarRegistros.html">Adicionar Registros</a>
-    </header>
+        <nav class="side-bar" id="navbar">
+            <ul>
+                <li onclick="sidebarFunction()">
+                    <i class='bx  bx-menu-closer'></i>
+                </li>
+                <li>
+                    <a href="index.html"> <i class='bx  bx-home'></i> <span id="home">Home</span></a>
+                </li>
+                <li>
+                    <a href="registros.html"> <i class='bx  bx-address-book'></i> <span id="reg"> Registros </span></a>
+                </li>
+                <li>
+                    <a href="adicinarRegistros.html"> <i class='bx  bx-file-plus'></i> <span id="add">Adicionar
+                            Registros</span></a>
+                </li>
+                <li>
+                    <a href=""><i class='bx  bx-calendar-event'></i> <span id="agenda">Agenda</span></a>
+                </li>
+            </ul>
+        </nav>
     <div class="alerta" id="div_alerta">
 
     </div>
@@ -74,6 +93,8 @@
 </body>
 
 </html>
+<script src="js/navbar.js"></script>
+
 <script>
     div_alerta.style.display = 'none';
 
