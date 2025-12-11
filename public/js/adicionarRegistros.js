@@ -1,5 +1,5 @@
    div_alerta.style.display = 'none';
-
+   let dataGasto;
     function alerta(texto) {
         div_alerta.style.display = ""
         div_alerta.innerHTML =
@@ -41,7 +41,7 @@
     }
 
     function registrar() {
-        var data = ipt_data.value;
+        var data = dataGasto;
         var valor = Number(ipt_valor.value);
         var titulo = ipt_nome.value;
         var tipo = select_tipo.value;
@@ -166,6 +166,8 @@ const dias = document.getElementById("dias");
 const mesAno = document.getElementById("mesAno");
 const gastosDoDia = document.getElementById("gastosDoDia");
 const confirmar = document.getElementById("confirmar");
+const btnAnterior = document.getElementById("btnAnterior");
+const btnProximo = document.getElementById("btnProximo");
 
 let dataSelecionada = null;
 
@@ -176,15 +178,87 @@ let anoAtual = hoje.getFullYear();
 
 btnAbrir.onclick = () => modal.style.display = "flex";
 fechar.onclick = () => modal.style.display = "none";
+btnAnterior.onclick = () => {
+    mesAtual--;
+    if (mesAtual < 0) {
+        mesAtual = 11;
+        anoAtual--;
+    }
+    gerarCalendario();
+}
+btnProximo.onclick = () => {
+    mesAtual++;
+    if (mesAtual > 11) {
+        mesAtual = 0;
+        anoAtual++;
+    }
+    gerarCalendario();
+}
 
-function buscarGastosDia(){
-    const gastos = {
+const gastos = {
     "2025-01-05": ["R$ 25,00 - Café", "R$ 80,00 - Mercado"],
     "2025-01-10": ["R$ 14,00 - Transporte"],
 };
-    return gastos;
+
+function buscarGastosDia(dataSelecionada){
+      console.log("Buscando gastos para", dataSelecionada);
+
+    if (gastos[dataSelecionada]) {
+        return gastos[dataSelecionada];
+    }
+
+    return [];
 }
 
 function gerarCalendario(){
-    
+    dias.innerHTML = "";
+    let primeiroDia = new Date(anoAtual,mesAtual,1).getDay();
+    let totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
+
+mesAno.innerText = new Date(anoAtual, mesAtual)
+    .toLocaleString("pt-BR", { month: "long", year: "numeric" });
+
+    for (let i = 0; i < primeiroDia; i++) {
+        dias.innerHTML += `<span></span>`;
+    }
+     for (let dia = 1; dia <= totalDias; dia++) {
+           let dataFormatada = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+
+        let span = document.createElement("span");
+        span.innerText = dia;
+
+        span.onclick = () => selecionarDia(dataFormatada, span);
+
+        dias.appendChild(span);
+    }
 }
+
+function selecionarDia(data, elemento) {
+     dataSelecionada = data;
+
+    document.querySelectorAll(".diaSelecionado")
+        .forEach(e => e.classList.remove("diaSelecionado"));
+
+    elemento.classList.add("diaSelecionado");
+
+    const listaGastos = buscarGastosDia(data);
+
+    if (listaGastos.length > 0) {
+        gastosDia.innerHTML = `
+            <b>Gastos de ${data}:</b><br>
+            ${listaGastos.map(g => `<p>${g}</p>`).join("")}
+        `;
+    } else {
+        gastosDia.innerHTML = "<i>Nenhum gasto neste dia.</i>";
+    }
+
+    confirmar.disabled = false;
+}
+
+confirmar.onclick = () => {
+    alert("Dia selecionado: " + dataSelecionada);
+    modal.style.display = "none";
+    dataGasto = dataSelecionada;
+};
+
+gerarCalendario();
