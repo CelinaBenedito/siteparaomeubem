@@ -262,3 +262,25 @@ confirmar.onclick = () => {
 };
 
 gerarCalendario();
+
+
+/*---------------- Parte do Header ----------------*/
+const titulos = document.querySelectorAll(".headerFormulario .titulo");
+
+titulos.forEach(item => {
+    item.addEventListener("click", () => {
+        
+        // Remove classe 'ativo' de todos
+        titulos.forEach(e => e.classList.remove("ativo"));
+        
+        // Adiciona no clicado
+        item.classList.add("ativo");
+
+        // Identificar qual aba foi selecionada (opcional)
+        let aba = item.dataset.form;
+        console.log("Aba selecionada:", aba);
+
+        // aqui você pode trocar telas, formularios etc
+        // trocarFormulario(aba);
+    });
+});
