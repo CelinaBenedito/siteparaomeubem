@@ -23,6 +23,7 @@
     background-color: var(--cor-fundo-pagina);
     color: var(--cor-texto-escuro);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    min-height: 100vh;
 }
 
 .containerGeral button {
@@ -141,6 +142,7 @@
     background-color: var(--cor-fundo-card);
     border-radius: 10px;
     box-shadow: 2px 2px 15px var(--cor-texto-secundario);
+    min-height: 520px;
 }
 
 .formulario {

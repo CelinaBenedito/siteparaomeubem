@@ -44,10 +44,10 @@
             <div class="containerFormulario">
                 <div class="headerFormulario">
 
-                    <a class="titulo ativo">
+                    <a class="titulo ativo" onclick="trocarFormulario('addGasto')">
                         <p>Adicionar gasto</p>
                     </a>
-                    <a class="titulo">
+                    <a class="titulo" onclick="trocarFormulario('gestaoConta')">
                     <p>Gestão de contas</p>
                     </a>
 
@@ -56,7 +56,7 @@
                     <img src="assets/gif/glaceon fofinha.gif" alt="">
                 </div>
 
-                <div class="formulario">
+                <div class="formulario" id="addGasto">
                     <div class="campo">
                         <input type="text" id="ipt_nome" placeholder=" " required>
                         <label>Com o que você gastou?</label>
@@ -116,9 +116,7 @@
                         </div>
 
                     </div>
-
-                </div>
-                <div class="buttons">
+<div class="buttons">
                     <button onclick="registrar()">Registrar Gasto</button>
                     <button onclick="adicioarTipo.showModal()">Adicionar tipo</button>
                     <dialog id="adicioarTipo" class="modal">
@@ -128,9 +126,18 @@
                     </dialog>
 
                 </div>
+                </div>
+
+                <div class="formulario" id="gestaoConta">
+                    <div class="campo">
+                        <select name="" id="">
+                            <option value="">Selecione a instituição</option>
+                        </select>
+                        <label for="">Selecionar instituição</label>
+                    </div>
+                </div>
+
             </div>
-
-
 
 
             <footer>
@@ -138,11 +145,7 @@
             </footer>
         </div>
 
-
     </div>
-
-
-
 </body>
 
 </html>

@@ -1,4 +1,6 @@
    div_alerta.style.display = 'none';
+    gestaoConta.style.display = "none";
+
    let dataGasto;
     function alerta(texto) {
         div_alerta.style.display = ""
@@ -281,6 +283,16 @@ titulos.forEach(item => {
         console.log("Aba selecionada:", aba);
 
         // aqui você pode trocar telas, formularios etc
-        // trocarFormulario(aba);
     });
 });
+
+function trocarFormulario(tela){
+    if(tela == "gestaoConta"){
+        gestaoConta.style.display = "";
+        addGasto.style.display = "none";
+    }else{
+        gestaoConta.style.display = "none";
+        addGasto.style.display = "";
+    }
+
+}
