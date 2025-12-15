@@ -13,6 +13,13 @@
 </head>
 
 <body onload="gerarInformacoes()">
+    <div class="alerta" id="div_alerta">
+        <div class="conteudoAlerta" id="conteudoAlerta">
+
+        </div>
+
+    </div>
+
     <div class="containerGeral">
         <nav class="side-bar" id="navbar">
             <ul>
@@ -23,7 +30,8 @@
                     <a href="index.html"> <i class='bx  bx-home'></i> <span id="home">Home</span></a>
                 </li>
                 <li>
-                    <a href="registros.html"> <i class='bx  bx-address-book'></i> <span id="reg"> Registros </span></a>
+                    <a href="registros.html"> <i class='bx  bx-address-book'></i> <span id="reg"> Registros
+                        </span></a>
                 </li>
                 <li>
                     <a href="adicinarRegistros.html"> <i class='bx  bx-file-plus'></i> <span id="add">Adicionar
@@ -35,9 +43,7 @@
             </ul>
         </nav>
         <div id="main" class="main">
-            <div class="alerta" id="div_alerta">
 
-            </div>
             <div class="titulo">
                 <h1>Controle de gastos<box-icon name='calendar-heart'></box-icon></h1>
             </div>
@@ -48,7 +54,7 @@
                         <p>Adicionar gasto</p>
                     </a>
                     <a class="titulo" onclick="trocarFormulario('gestaoConta')">
-                    <p>Gestão de contas</p>
+                        <p>Gestão de contas</p>
                     </a>
 
                 </div>
@@ -116,16 +122,19 @@
                         </div>
 
                     </div>
-<div class="buttons">
-                    <button onclick="registrar()">Registrar Gasto</button>
-                    <button onclick="adicioarTipo.showModal()">Adicionar tipo</button>
-                    <dialog id="adicioarTipo" class="modal">
-                        <h1>Adicionar novo tipo</h1>
-                        <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
-                        <button onclick="adicioarTipos()">Adicionar</button>
-                    </dialog>
+                    <div class="buttons">
+                        <button onclick="registrar()">Registrar Gasto</button>
+                        <button onclick="adicionarTipo.showModal()">Adicionar tipo</button>
+                        <dialog id="adicionarTipo" class="adicionarTipo">
+                            <div class="conteudoTipo">
+                                <h1>Adicionar novo tipo</h1>
+                                <input type="text" placeholder="Adicione o nome" id="ipt_tituloTipo">
+                                <button onclick="adicionarTipos()">Adicionar</button>
 
-                </div>
+                            </div>
+                        </dialog>
+
+                    </div>
                 </div>
 
                 <div class="formulario" id="gestaoConta">

@@ -2,9 +2,10 @@ div_alerta.style.display = 'none';
 gestaoConta.style.display = "none";
 
 let dataGasto;
+
 function alerta(texto) {
-    div_alerta.style.display = ""
-    div_alerta.innerHTML =
+    div_alerta.style.display = "flex"
+    conteudoAlerta.innerHTML =
         `
         ${texto}
         `
@@ -102,13 +103,19 @@ function registrar() {
             atualizarSaldo(valor, instituicao);
             return setTimeout(() => alerta(
                 `  
-                        Registro realizado com sucesso! <br>
+                        Registro realizado com sucesso!<br>
+                        <div>
+
                         <a href="registros.html">
                             <button>Ver registros</button>
                         </a>
 
-                        <button onclick='window.location.reload()'>Continuar a registrar</button>
-                    `
+                        <button onclick='window.location.reload()'>
+                            Continuar a registrar
+                        </button>
+
+                        </div>
+                `
             ), 3000);
 
         }
@@ -141,7 +148,7 @@ function atualizarSaldo(valor, instituicao) {
     });
 }
 
-function adicioarTipos() {
+function adicionarTipos() {
     var titulo = ipt_tituloTipo.value
     fetch("/registros/adicionarTipo", {
         method: "POST",
@@ -160,7 +167,7 @@ function adicioarTipos() {
                 <button onclick="div_alerta.style.display='none'">OK</button>`)
         }
         else {
-            return alerta(`Houver um erro ao adicionar tipo`, resposta)
+            return alerta(`Houve um erro ao adicionar tipo`, resposta)
         }
     })
 }
