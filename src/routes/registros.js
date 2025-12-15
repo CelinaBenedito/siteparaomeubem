@@ -3,6 +3,10 @@ var router = express.Router();
 
 var registrosController = require("../controllers/registrosController");
 
+router.get("/buscarData/:data", function(req,res){
+    registrosController.buscarData(req,res);
+    console.log("Estou no router buscar data");
+});
 
 router.post("/registrar", function (req,res){
     registrosController.registrar(req,res);

@@ -100,6 +100,16 @@ function carregarRegistros(req,res){
 
 }
 
+function buscarData(req,res){
+   var data = req.params.data;
+registrosModel.buscarData(data).then(function(resposta){
+    res.status(200).send(resposta);
+    console.log("Busca de data feita com sucesso!", resposta)
+}).catch(function(erro){
+    res.status(500).json(erro.sqlMessage);
+})
+}
+
 
 module.exports = {
 registrar,
@@ -110,5 +120,6 @@ atualizarSaldo,
 adicionarSaldo,
 mostrarSaldoTotal,
 mostrarTodasInstituicoes,
-carregarRegistros
+carregarRegistros,
+buscarData
 }

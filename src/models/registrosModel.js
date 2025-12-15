@@ -90,6 +90,15 @@ function carregarRegistros() {
         return database.executar(instrucao);
 }
 
+function buscarData(data){
+    console.log("---------Entrei no model buscar data---------");
+    var instrucao =
+    `
+    SELECT * FROM registros WHERE dataGasto = '${data}';
+    `
+    return database.executar(instrucao);
+}
+
 module.exports = {
     registrar,
     adicionarTipo,
@@ -99,5 +108,6 @@ module.exports = {
     adicionarSaldo,
     mostrarSaldoTotal,
     mostrarTodasInstituicoes,
-    carregarRegistros
+    carregarRegistros,
+    buscarData
 }

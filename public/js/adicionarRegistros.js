@@ -1,101 +1,107 @@
-   div_alerta.style.display = 'none';
-    gestaoConta.style.display = "none";
+div_alerta.style.display = 'none';
+gestaoConta.style.display = "none";
 
-   let dataGasto;
-    function alerta(texto) {
-        div_alerta.style.display = ""
-        div_alerta.innerHTML =
-            `
+let dataGasto;
+function alerta(texto) {
+    div_alerta.style.display = ""
+    div_alerta.innerHTML =
+        `
         ${texto}
         `
-    }
-    function gerarTipos() {
-        select_tipo.innerHTML = "<option value='#'>Escolha um tipo</option>"
-        fetch("/registros/gerarTipos", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
+}
 
-                    select_tipo.innerHTML +=
-                        `
+function gerarInformacoes() {
+    gerarTipos();
+    gerarInstituicao();
+}
+
+function gerarTipos() {
+    select_tipo.innerHTML = "<option value='#'>Escolha um tipo</option>"
+    fetch("/registros/gerarTipos", {
+        method: "GET"
+    }).then(res => {
+        res.json().then(json => {
+            for (let c = 0; json.length > c; c++) {
+
+                select_tipo.innerHTML +=
+                    `
                             <option value="${json[c].id}">${json[c].titulo}</option>
                         `
-                }
-            })
+            }
         })
-    }
+    })
+}
 
-    function gerarInstituicao() {
-        select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
-        fetch("/registros/gerarInstituicoes", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
-                    select_instituicao.innerHTML +=
-                        `
+function gerarInstituicao() {
+    select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
+    fetch("/registros/gerarInstituicoes", {
+        method: "GET"
+    }).then(res => {
+        res.json().then(json => {
+            for (let c = 0; json.length > c; c++) {
+                select_instituicao.innerHTML +=
+                    `
                             <option value="${json[c].id}">${json[c].nome}</option>
                         `
-                }
-            })
+            }
         })
+    })
+}
+
+function registrar() {
+    var data = dataGasto;
+    var valor = Number(ipt_valor.value);
+    var titulo = ipt_nome.value;
+    var tipo = select_tipo.value;
+    var Desc = ipt_desc.value;
+    var instituicao = select_instituicao.value
+
+    console.log('Cliquei em registrar')
+
+    if (Desc == "" || Desc == false) {
+        Desc = "Nenhuma descrição fornecida"
+    }
+    if (data == false || data == 0) {
+        return alert("Data inválida");
+    }
+    if (valor <= 0) {
+        return alert("Valor inválido");
+    }
+    if (titulo == "") {
+        return alert("Titulo inválido");
+    }
+    if (tipo == '#') {
+        return alert("Escolha um tipo");
+    }
+    if (instituicao == '#') {
+        return alert("Escolha uma instituição");
     }
 
-    function registrar() {
-        var data = dataGasto;
-        var valor = Number(ipt_valor.value);
-        var titulo = ipt_nome.value;
-        var tipo = select_tipo.value;
-        var Desc = ipt_desc.value;
-        var instituicao = select_instituicao.value
-
-        console.log('Cliquei em registrar')
-
-        if (Desc == "" || Desc == false) {
-            Desc = "Nenhuma descrição fornecida"
-        }
-        if (data == false || data == 0) {
-            return alert("Data inválida");
-        }
-        if (valor <= 0) {
-            return alert("Valor inválido");
-        }
-        if (titulo == "") {
-            return alert("Titulo inválido");
-        }
-        if (tipo == '#') {
-            return alert("Escolha um tipo");
-        }
-        if (instituicao == '#') {
-            return alert("Escolha uma instituição");
-        }
-
-        setTimeout(alerta(`Registrando...
+    setTimeout(alerta(`Registrando...
         <div class="glaceonCorrendoDiv">
     <img class="glaceon correndo" src="/assets/gif/glaceon-correndo-unscreen.gif" alt="">
     </div>
         `), 2000)
 
-        fetch("/registros/registrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                descServer: Desc,
-                tipoServer: tipo,
-                tituloServer: titulo,
-                dataServer: data,
-                instituicaoServer: instituicao
-            }),
-        }).then((response) => {
-            console.log("Resposta:", response);
-            if (response.ok) {
-                atualizarSaldo(valor, instituicao);
-                return setTimeout(() => alerta(
-                    `  
+    fetch("/registros/registrar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            valorServer: valor,
+            descServer: Desc,
+            tipoServer: tipo,
+            tituloServer: titulo,
+            dataServer: data,
+            instituicaoServer: instituicao
+        }),
+    }).then((response) => {
+        console.log("Resposta:", response);
+        if (response.ok) {
+            atualizarSaldo(valor, instituicao);
+            return setTimeout(() => alerta(
+                `  
                         Registro realizado com sucesso! <br>
                         <a href="registros.html">
                             <button>Ver registros</button>
@@ -103,63 +109,63 @@
 
                         <button onclick='window.location.reload()'>Continuar a registrar</button>
                     `
-                ), 3000);
+            ), 3000);
 
-            }
-            else {
-                alert("Houve um erro ao registrar", response)
-            }
-        });
+        }
+        else {
+            alert("Houve um erro ao registrar", response)
+        }
+    });
 
-    }
+}
 
-    function atualizarSaldo(valor, instituicao) {
-        console.log("chamou atualizar saldo")
-        fetch(`/registros/atualizarSaldo`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                instituicaoServer: instituicao
-            }),
-        }).then((resposta) => {
-            console.log("Resposta:", resposta);
-            if (resposta.ok) {
-                return console.log("Saldo atualizado")
-            }
-            else {
-                console.error("Houver um erro ao atualizar o saldo", resposta)
-            }
-        });
-    }
+function atualizarSaldo(valor, instituicao) {
+    console.log("chamou atualizar saldo")
+    fetch(`/registros/atualizarSaldo`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            valorServer: valor,
+            instituicaoServer: instituicao
+        }),
+    }).then((resposta) => {
+        console.log("Resposta:", resposta);
+        if (resposta.ok) {
+            return console.log("Saldo atualizado")
+        }
+        else {
+            console.error("Houver um erro ao atualizar o saldo", resposta)
+        }
+    });
+}
 
-    function adicioarTipos() {
-        var titulo = ipt_tituloTipo.value
-        fetch("/registros/adicionarTipo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                tituloServer: titulo
-            }),
-        }).then(function (resposta) {
-            console.log("Resposta: ", resposta);
-            if (resposta.ok) {
-                gerarTipos();
-                adicioarTipo.close();
-                return alerta(`Tipo adicionado com sucesso!<br>
+function adicioarTipos() {
+    var titulo = ipt_tituloTipo.value
+    fetch("/registros/adicionarTipo", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tituloServer: titulo
+        }),
+    }).then(function (resposta) {
+        console.log("Resposta: ", resposta);
+        if (resposta.ok) {
+            gerarTipos();
+            adicioarTipo.close();
+            return alerta(`Tipo adicionado com sucesso!<br>
                 <button onclick="div_alerta.style.display='none'">OK</button>`)
-            }
-            else {
-                return alerta(`Houver um erro ao adicionar tipo`, resposta)
-            }
-        })
-    }
+        }
+        else {
+            return alerta(`Houver um erro ao adicionar tipo`, resposta)
+        }
+    })
+}
 
-    /*-------------- Calendário --------------*/
+/*-------------- Calendário --------------*/
 
 const btnAbrir = document.getElementById("calendario");
 const modal = document.getElementById("modal");
@@ -174,7 +180,7 @@ const btnProximo = document.getElementById("btnProximo");
 let dataSelecionada = null;
 
 let hoje = new Date();
-let mesAtual = hoje.getMonth();  
+let mesAtual = hoje.getMonth();
 let anoAtual = hoje.getFullYear();
 
 
@@ -202,29 +208,44 @@ const gastos = {
     "2025-01-10": ["R$ 14,00 - Transporte"],
 };
 
-function buscarGastosDia(dataSelecionada){
-      console.log("Buscando gastos para", dataSelecionada);
+async function buscarGastosDia(dataSelecionada) {
+    console.log("Buscando gastos para", dataSelecionada);
 
-    if (gastos[dataSelecionada]) {
-        return gastos[dataSelecionada];
+    const res = await fetch(`/registros/buscarData/${dataSelecionada}`, {
+        method: "GET"
+    });
+
+    const json = await res.json();
+    console.log("Tamanho de gastos:", json.length);
+
+    let listaGastos = [];
+
+    for (let c = 0; c < json.length; c++) {
+        const data = new Date(json[c].dataGasto);
+        const dataFormatada = data.toISOString().split("T")[0];
+
+        if (dataFormatada === dataSelecionada) {
+            listaGastos.push(json[c]);
+        }
     }
 
-    return [];
+    return listaGastos;
 }
 
-function gerarCalendario(){
+
+function gerarCalendario() {
     dias.innerHTML = "";
-    let primeiroDia = new Date(anoAtual,mesAtual,1).getDay();
+    let primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
     let totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
 
-mesAno.innerText = new Date(anoAtual, mesAtual)
-    .toLocaleString("pt-BR", { month: "long", year: "numeric" });
+    mesAno.innerText = new Date(anoAtual, mesAtual)
+        .toLocaleString("pt-BR", { month: "long", year: "numeric" });
 
     for (let i = 0; i < primeiroDia; i++) {
         dias.innerHTML += `<span></span>`;
     }
-     for (let dia = 1; dia <= totalDias; dia++) {
-           let dataFormatada = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+    for (let dia = 1; dia <= totalDias; dia++) {
+        let dataFormatada = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
 
         let span = document.createElement("span");
         span.innerText = dia;
@@ -235,21 +256,29 @@ mesAno.innerText = new Date(anoAtual, mesAtual)
     }
 }
 
-function selecionarDia(data, elemento) {
-     dataSelecionada = data;
+async function selecionarDia(data, elemento) {
+    dataSelecionada = data;
 
     document.querySelectorAll(".diaSelecionado")
         .forEach(e => e.classList.remove("diaSelecionado"));
 
     elemento.classList.add("diaSelecionado");
 
-    const listaGastos = buscarGastosDia(data);
+    const listaGastos = await buscarGastosDia(data);
 
+    console.log("tamanho lista gastos: ",listaGastos.length)
     if (listaGastos.length > 0) {
+        console.log("Lista de gastos > 0")
+        novaData = new Date(listaGastos[0].dataGasto);
+        const dataFormatada = novaData.toLocaleDateString("pt-BR");
         gastosDia.innerHTML = `
-            <b>Gastos de ${data}:</b><br>
-            ${listaGastos.map(g => `<p>${g}</p>`).join("")}
+            <b>Gastos de ${dataFormatada}:</b><br>
         `;
+        for (let c = 0; c < listaGastos.length; c++) {
+            gastosDia.innerHTML += `
+            <b>${listaGastos[c].tituloGasto} - R$${listaGastos[c].valor}</b><br>
+        `;
+        }
     } else {
         gastosDia.innerHTML = "<i>Nenhum gasto neste dia.</i>";
     }
@@ -271,10 +300,10 @@ const titulos = document.querySelectorAll(".headerFormulario .titulo");
 
 titulos.forEach(item => {
     item.addEventListener("click", () => {
-        
+
         // Remove classe 'ativo' de todos
         titulos.forEach(e => e.classList.remove("ativo"));
-        
+
         // Adiciona no clicado
         item.classList.add("ativo");
 
@@ -286,11 +315,11 @@ titulos.forEach(item => {
     });
 });
 
-function trocarFormulario(tela){
-    if(tela == "gestaoConta"){
+function trocarFormulario(tela) {
+    if (tela == "gestaoConta") {
         gestaoConta.style.display = "";
         addGasto.style.display = "none";
-    }else{
+    } else {
         gestaoConta.style.display = "none";
         addGasto.style.display = "";
     }
