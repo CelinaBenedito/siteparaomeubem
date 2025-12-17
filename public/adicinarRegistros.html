@@ -144,49 +144,48 @@
                         </select>
                         <label for="">Selecionar instituição</label>
                     </div>
-                </div>
+                    <div class="campo">
+                        <div class="titulo">
+                            <h3>Saldo total:</h3>
+                        </div>
+                        <p id="ValorTotal"></p>
+                    </div>
 
-                            <div class="card">
-                <div class="titulo">
-                    <h3>Saldo total:</h3>
-                </div>
-                <p id="ValorTotal"></p>
 
 
-                <div class="buttons">
                     <button onclick="addValor.showModal(), gerarInstituicao()">Adicionar valor</button>
                     <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
-                    <button onclick="consultaSaldo.showModal(),Consulta()">Consultar saldo</button>
+                    <button>Realizar transferência</button>
                 </div>
-            </div>
+                <div id="modalAddValor" class="modal">
+                    <div class="conteudoModal">
+                        <input type="number" id="ipt_valor">
+                        <label>Adicione um valor</label>
+                        <div>
+                            <button onclick="addValor.close()">Cancelar</button>
+                            <button onclick="adicionar()">Salvar</button>
+                        </div>
+                    </div>
 
-            <dialog id="addValor" class="modal">
-                <h1>Adicione um valor</h1>
-                <input type="number" id="ipt_valor">
-                <select id="select_instituicao">
-                </select>
-                <br>
-                <div>
-                    <button onclick="addValor.close()">Cancelar</button>
-                    <button onclick="adicionar()">Salvar</button>
-                </div>
-            </dialog>
-            <dialog id="removeValor" class="modal">
-                <h1>Remover um valor</h1>
-                <input type="number" id="ipt_remove">
-                <select id="select_instituicao_remove">
-                </select>
-                <br>
-                <div>
-                    <button onclick="removeValor.close()">Cancelar</button>
-                    <button onclick="remover()">Salvar</button>
-                </div>
-            </dialog>
-            <dialog id="consultaSaldo" class="modal">
-                <div class="principal" id="principal">
 
                 </div>
-            </dialog>
+
+                <dialog id="removeValor" class="modal">
+                    <h1>Remover um valor</h1>
+                    <input type="number" id="ipt_remove">
+                    <select id="select_instituicao_remove">
+                    </select>
+                    <br>
+                    <div>
+                        <button onclick="removeValor.close()">Cancelar</button>
+                        <button onclick="remover()">Salvar</button>
+                    </div>
+                </dialog>
+                <dialog id="consultaSaldo" class="modal">
+                    <div class="principal" id="principal">
+
+                    </div>
+                </dialog>
 
             </div>
 

@@ -99,6 +99,41 @@ function buscarData(data){
     return database.executar(instrucao);
 }
 
+function quantidadeTipo(){
+    console.log("---------Entrei no model quantidade por tipo---------");
+    var instrucao = 
+    `
+        SELECT 
+        t.titulo,
+        COUNT(r.id) AS qtd
+    FROM registros r
+    JOIN tipo t ON t.id = r.fkTipo
+    GROUP BY t.titulo;
+    `
+
+    return database.executar(instrucao);
+}
+
+function gastosMes(ano){
+
+    console.log("---------Entrei no model gastos por mês---------");
+
+
+    var instrucao = 
+    `
+        SELECT
+        MONTH(dataGasto) AS mes_num,
+        DATE_FORMAT(dataGasto, '%m/%Y') AS mes_label,
+        SUM(valor) AS total_gasto
+    FROM registros
+    WHERE YEAR(dataGasto) = ${ano}
+    GROUP BY mes_num, mes_label
+    ORDER BY mes_num;
+
+    `
+    return database.executar(instrucao);
+}
+
 module.exports = {
     registrar,
     adicionarTipo,
@@ -109,5 +144,7 @@ module.exports = {
     mostrarSaldoTotal,
     mostrarTodasInstituicoes,
     carregarRegistros,
-    buscarData
+    buscarData,
+    quantidadeTipo,
+    gastosMes
 }

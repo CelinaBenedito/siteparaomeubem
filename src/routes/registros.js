@@ -51,4 +51,12 @@ router.get("/carregarRegistros", function(req,res){
     registrosController.carregarRegistros(req,res);
 })
 
+router.get("/quantidadeTipo", function(req,res){
+    registrosController.quantidadeTipo(req,res);
+})
+
+router.get("/gastosMes/:ano", function(req,res){
+    registrosController.gastosMes(req,res);
+});
+
 module.exports = router;

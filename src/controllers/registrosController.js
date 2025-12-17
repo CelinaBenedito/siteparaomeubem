@@ -110,6 +110,25 @@ registrosModel.buscarData(data).then(function(resposta){
 })
 }
 
+function quantidadeTipo(req,res){
+    registrosModel.quantidadeTipo().then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Buca de quantidade por tipo feita com sucesso!", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
+function gastosMes(req,res){
+    var ano = req.params.ano;
+    registrosModel.gastosMes(ano).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de gastos por mês bem sucedida! ", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
 
 module.exports = {
 registrar,
@@ -121,5 +140,7 @@ adicionarSaldo,
 mostrarSaldoTotal,
 mostrarTodasInstituicoes,
 carregarRegistros,
-buscarData
+buscarData,
+quantidadeTipo,
+gastosMes
 }
