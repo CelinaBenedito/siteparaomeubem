@@ -101,10 +101,11 @@ function criarGrafico(altura, tipo, nome, dados, labels, div) {
 
 opcaoDonut = {
   chart: {
-    type: 'donut'
+    type: 'donut',
+    height: 350
   },
   series: [50, 30],
-  labels: ['Apple', 'Mango'],
+  labels: ['Alimentação', 'Roupa'],
   fill: {
     colors: ['#B4D9D5', '#367373']
   },
