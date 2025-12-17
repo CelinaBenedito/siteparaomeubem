@@ -4,228 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/Estilos.css">
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <title>Registros</title>
 </head>
 
 <body onload="carregarRegistros()">
-    <header>
-        <a href="registros.html">Registros</a>
-        <a href="adicinarRegistros.html">Adicionar Registros</a>
-    </header>
-    <div class="container">
-        <div class="titulo">
-            <h3>Saldo total:</h3>
-        </div>
+    <div class="containerGeral">
+        <nav class="side-bar" id="navbar">
+            <ul>
+                <li onclick="sidebarFunction()">
+                    <i class='bx  bx-menu-closer'></i>
+                </li>
+                <li>
+                    <a href="index.html"> <i class='bx  bx-home'></i> <span id="home">Home</span></a>
+                </li>
+                <li>
+                    <a href="registros.html"> <i class='bx  bx-address-book'></i> <span id="reg"> Registros
+                        </span></a>
+                </li>
+                <li>
+                    <a href="adicinarRegistros.html"> <i class='bx  bx-file-plus'></i> <span id="add">Adicionar
+                            Registros</span></a>
+                </li>
+                <li>
+                    <a href=""><i class='bx  bx-calendar-event'></i> <span id="agenda">Agenda</span></a>
+                </li>
+            </ul>
+        </nav>
+        <div class="main" id="main">
 
-        <p id="ValorTotal"></p>
+            <div id="containerRegistros">
 
-
-        <div class="buttons">
-            <button onclick="addValor.showModal(), gerarInstituicao()">Adicionar valor</button>
-            <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
-            <button onclick="consultaSaldo.showModal(),Consulta()">Consultar saldo</button>
-        </div>
-        <dialog id="addValor" class="modal">
-            <h1>Adicione um valor</h1>
-            <input type="number" id="ipt_valor">
-            <select id="select_instituicao">
-            </select>
-            <br>
-            <div>
-                <button onclick="addValor.close()">Cancelar</button>
-                <button onclick="adicionar()">Salvar</button>
+                <h1>Registros</h1> <button><i class='bx  bx-filter'></i></button>
             </div>
-        </dialog>
-        <dialog id="removeValor" class="modal">
-            <h1>Remover um valor</h1>
-            <input type="number" id="ipt_remove">
-            <select id="select_instituicao_remove">
-            </select>
-            <br>
-            <div>
-                <button onclick="removeValor.close()">Cancelar</button>
-                <button onclick="remover()">Salvar</button>
+            <div class="lista">
+
+                <div class="registros" id="registros">
+                </div>
             </div>
-        </dialog>
-        <dialog id="consultaSaldo" class="modal">
-            <div class="principal" id="principal">
 
-            </div>
-        </dialog>
-
-    </div>
-
-
-    <div class="buttons">
-        <button>Ver gasto mensal</button>
-        <button>Ver gasto Anual</button>
-    </div>
-    <div id="containerRegistros" class="containerRegistros"
-        style="display: grid; grid-template-columns: 70% 30%; width: 100%;">
-        <div class="separacao">
-            <h1>Registros</h1>
-            <div class="registros" id="registros">
-            </div>
-        </div>
-        <div>
-            <h3>Filtros</h3>
-            <a class="pesquisa" onclick="">
-                <h4>Tipo</h4>
-            </a>
-            <a class="pesquisa" onclick="">
-                <h4>Instituição</h4>
-            </a>
-            <a class="pesquisa" onclick="">
-                <h4>Data</h4>
-            </a>
 
         </div>
+        <div class="divimgGlaceonCostas">
+            <img class="imgGlaceonCostas" src="assets/gif/glaceon de costas.gif" alt="">
+        </div>
 
-    </div>
-    <div class="divimgGlaceonCostas">
-        <img class="imgGlaceonCostas" src="assets/gif/glaceon de costas.gif" alt="">
-    </div>
-    <footer>
-        <a href="teamo.html">Te amo meu bem </a>
-    </footer>
 
+        <footer>
+            <a href="teamo.html">Te amo meu bem </a>
+        </footer>
+    </div>
 </body>
 
 </html>
-<script>
-
-    function carregarRegistros() {
-        fetch("/registros/carregarRegistros", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                registros.innerHTML =
-                    `
-                        <div class="cabecalho">
-                            <div class="item">Nome gasto</div> 
-                            <div class="item"> Descrição gasto </div>
-                            <div class="item"> Valor</div> 
-                            <div class="item"> Tipo do gasto</div> 
-                            <div class="item"> Instituição</div> 
-                            <div class="item"> Data do gasto</div>
-                        </div>
-                    `
-                for (let c = 0; json.length > c; c++) {
-                    const data = new Date(json[c].dataGasto)
-                    const dataFormatada = data.toLocaleDateString("pt-BR")
-
-
-                    registros.innerHTML +=
-                        `
-                    <div class="cardRegistro">
-                     <div class="item">${json[c].tituloGasto}</div>
-                     <div class="item">${json[c].descricao}</div>
-                     <div class="item">${json[c].valor}</div>
-                     <div class="item">${json[c].tituloTipo}</div>
-                     <div class="item">${json[c].nomeInstituicao}</div>
-                     <div class="item">${dataFormatada}</div>
-                    </div>
-
-                    `
-                }
-            })
-        })
-    }
-
-    function adicionar() {
-        var valor = ipt_valor.value;
-        var instituicao = select_instituicao.value;
-        fetch("/registros/adicionarSaldo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                instituicaoServer: instituicao
-            })
-        }).then((resposta) => {
-            console.log("Resposta:", resposta);
-            if (resposta.ok) {
-                console.log("Saldo atualizado")
-                return window.location.reload()
-            }
-            else {
-                console.error("Houver um erro ao atualizar o saldo", resposta)
-            }
-        });
-    }
-    function remover() {
-        var valor = ipt_remove.value;
-        var instituicao = select_instituicao_remove.value;
-        fetch("/registros/atualizarSaldo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                valorServer: valor,
-                instituicaoServer: instituicao
-            })
-        }).then((resposta) => {
-            console.log("Resposta:", resposta);
-            if (resposta.ok) {
-                console.log("Saldo atualizado")
-                return window.location.reload()
-            }
-            else {
-                console.error("Houver um erro ao atualizar o saldo", resposta)
-            }
-        });
-    }
-
-    function gerarInstituicao() {
-        select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
-        fetch("/registros/gerarInstituicoes", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
-                    select_instituicao_remove.innerHTML +=
-                        `
-                            <option value="${json[c].id}">${json[c].nome}</option>
-                    `
-                    select_instituicao.innerHTML +=
-                        `
-                            <option value="${json[c].id}">${json[c].nome}</option>
-                        `
-                }
-            })
-        })
-    }
-    fetch("/registros/mostrarSaldoTotal", {
-        method: "GET"
-    }).then(res => {
-        res.json().then(json => {
-            ValorTotal.innerHTML = json[0].valorTotal
-        })
-    })
-
-    function Consulta() {
-        principal.innerHTML = "    "
-        fetch("/registros/mostrarTodasInstituicoes", {
-            method: "GET"
-        }).then(res => {
-            res.json().then(json => {
-                for (let c = 0; json.length > c; c++) {
-                    principal.innerHTML +=
-                        `<div>
-                            <h1>${json[c].nome}</h1>
-                            <div class="textoValor">
-                                <p>${json[c].valor}</p>
-                            </div>
-                            </div>
-                        `
-                }
-            })
-        })
-
-
-    }
-</script>
+<script src="js/navbar.js"></script>
+<script src="js/registros.js"></script>

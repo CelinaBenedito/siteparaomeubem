@@ -8,6 +8,9 @@
     --cor-texto-claro: #FFFFFF;
     --cor-texto-escuro: #1A1A1A;
     --cor-texto-secundario: #4A4A4A;
+    --cor-texto-alternativo: #367373;
+    --sombra-card: rgba(54, 115, 115, 0.099);
+
 }
 
 * {
@@ -16,14 +19,16 @@
     border: 0;
     box-sizing: border-box;
 }
-.adicionarTipo{
+
+.adicionarTipo {
     width: 100%;
     height: 100%;
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.5);
 }
-.conteudoTipo{
+
+.conteudoTipo {
     display: flex;
     background: var(--cor-fundo-card);
     padding: 20px;
@@ -44,7 +49,7 @@
     z-index: 10000;
 }
 
-.conteudoAlerta{
+.conteudoAlerta {
     display: flex;
     background: var(--cor-fundo-card);
     padding: 20px;
@@ -54,14 +59,16 @@
     justify-content: center;
     flex-direction: column;
 }
-.conteudoAlerta button{
+
+.conteudoAlerta button {
     padding: 10px;
     border-radius: 10px;
     background-color: var(--teal-escuro);
     color: var(--cor-texto-claro);
     margin: 20px 0px;
 }
-.glaceonCorrendoDiv{
+
+.glaceonCorrendoDiv {
     display: flex;
     width: 100%;
     align-items: center;
@@ -369,4 +376,156 @@
 .headerFormulario .titulo:hover {
     opacity: 0.7;
     cursor: pointer;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cor-fundo-card);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 15px var(--cor-texto-secundario);
+    align-items: center;
+    justify-content: center;
+}
+
+.cabecalho {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    text-align: center;
+    background-color: var(--teal-escuro);
+    color: var(--cor-texto-claro);
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.lista {
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.registros {
+    padding: 5px;
+}
+
+.cardRegistro {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    gap: 16px;
+    align-items: center;
+
+    background: var(--cor-fundo-card);
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 16px var(--sombra-card);
+}
+
+.ano {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 32px;
+}
+
+.mes {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    text-transform: capitalize;
+}
+
+.dataRegistro {
+    font-weight: 700;
+    font-size: 1.9rem;
+    color: var(--cor-texto-alternativo);
+}
+
+.registroTitulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+}
+
+.registroDescricao {
+    font-size: 0.85rem;
+    color: var(--cor-texto-secundario);
+}
+
+.registroValor {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--cor-texto-escuro);
+}
+
+.registroTipo {
+    background: var(--teal-claro);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 1.0rem;
+    color: var(--cor-texto-claro);
+}
+
+.hidden {
+    display: none;
+}
+
+.ano-header {
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+
+}
+
+.mes-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    cursor: pointer;
+    text-transform: capitalize;
+
+}
+
+.ano-bloco {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--cor-fundo-card);
+}
+
+.mes-bloco {
+    margin-left: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--cor-fundo-card);
+    box-shadow: 0 6px 16px var(--sombra-card);
+}
+
+.ano-header,
+.mes-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ano-header::after,
+.mes-header::after {
+  content: "▶";
+  font-size: 0.9rem;
+  transition: transform 0.25s ease;
+}
+
+.ano-header.open::after,
+.mes-header.open::after {
+  transform: rotate(90deg);
+}
+
+.ano-header.open,
+.mes-header.open {
+  color: var(--teal-escuro);
 }
