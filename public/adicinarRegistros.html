@@ -38,7 +38,8 @@
                             Registros</span></a>
                 </li>
                 <li>
-                    <a href=""><i class='bx  bx-calendar-event'></i> <span id="agenda">Agenda</span></a>
+                    <a href="agendaGastos.html"><i class='bx  bx-calendar-event'></i> <span
+                            id="agenda">Agenda</span></a>
                 </li>
             </ul>
         </nav>
@@ -139,23 +140,26 @@
 
                 <div class="formulario" id="gestaoConta">
                     <div class="campo">
-                        <select name="" id="">
+                        <select id="gestaoInstituicao">
                             <option value="">Selecione a instituição</option>
                         </select>
                         <label for="">Selecionar instituição</label>
                     </div>
                     <div class="campo">
+
+                    </div>
+                    <div class="campo escondido" id="escondido">
                         <div class="titulo">
                             <h3>Saldo total:</h3>
                         </div>
                         <p id="ValorTotal"></p>
+                        <div class="botoes">
+                            <button onclick="addValor.showModal(), gerarInstituicao()">Adicionar valor</button>
+                            <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
+                            <button>Realizar transferência</button>
+                        </div>
                     </div>
 
-
-
-                    <button onclick="addValor.showModal(), gerarInstituicao()">Adicionar valor</button>
-                    <button onclick="removeValor.showModal(), gerarInstituicao()">Remover valor</button>
-                    <button>Realizar transferência</button>
                 </div>
                 <div id="modalAddValor" class="modal">
                     <div class="conteudoModal">

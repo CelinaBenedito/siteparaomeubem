@@ -33,7 +33,8 @@ function gerarTipos() {
     })
 }
 
-function gerarInstituicao() {
+async function gerarInstituicao() {
+    gestaoInstituicao = document.getElementById("gestaoInstituicao")
     select_instituicao.innerHTML = "<option value='#'> Escolha uma instituição</option>"
     fetch("/registros/gerarInstituicoes", {
         method: "GET"
@@ -42,11 +43,24 @@ function gerarInstituicao() {
             for (let c = 0; json.length > c; c++) {
                 select_instituicao.innerHTML +=
                     `
-                            <option value="${json[c].id}">${json[c].nome}</option>
-                        `
+                        <option value="${json[c].id}">${json[c].nome}</option>
+                    `
+
+                gestaoInstituicao.innerHTML += 
+                `
+                 <option onclick="controleInstituicao()">${json[c].nome}</option>
+                `
             }
         })
     })
+}
+
+async function controleInstituicao(){
+    console.log("entrei no controle de instituição")
+    escondido = document.getElementById("escondido")
+
+    escondido.style.display = ""
+
 }
 
 function registrar() {
