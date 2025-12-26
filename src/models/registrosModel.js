@@ -87,22 +87,22 @@ function carregarRegistros() {
             inner join tipo t on t.id = r.fkTipo
             inner join instituicao i on i.id =r.fkInstituicao;
         `
-        return database.executar(instrucao);
+    return database.executar(instrucao);
 }
 
-function buscarData(data){
+function buscarData(data) {
     console.log("---------Entrei no model buscar data---------");
     var instrucao =
-    `
+        `
     SELECT * FROM registros WHERE dataGasto = '${data}';
     `
     return database.executar(instrucao);
 }
 
-function quantidadeTipo(){
+function quantidadeTipo() {
     console.log("---------Entrei no model quantidade por tipo---------");
-    var instrucao = 
-    `
+    var instrucao =
+        `
         SELECT 
         t.titulo,
         COUNT(r.id) AS qtd
@@ -114,13 +114,39 @@ function quantidadeTipo(){
     return database.executar(instrucao);
 }
 
-function gastosMes(ano){
+function gastosMes(ano, mes) {
 
-    console.log("---------Entrei no model gastos por mês---------");
+  console.log("---------Entrei no model gastos por mês---------");
+
+  var instrucao = `
+SELECT
+    DATE(dataGasto) AS data,
+    MIN(DAY(dataGasto)) AS dia,
+    MIN(DATE_FORMAT(dataGasto, '%d/%m/%Y')) AS dia_label,
+    SUM(valor) AS total_gasto
+FROM registros
+WHERE dataGasto BETWEEN
+      DATE('${ano}-${mes}-20')
+  AND DATE_SUB(
+        DATE_ADD(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH),
+        INTERVAL 1 DAY
+      )
+GROUP BY DATE(dataGasto)
+ORDER BY DATE(dataGasto);
+
+  `;
+
+  return database.executar(instrucao);
+}
 
 
-    var instrucao = 
-    `
+function gastosAno(ano) {
+
+    console.log("---------Entrei no model gastos por ano---------");
+
+
+    var instrucao =
+        `
         SELECT
         MONTH(dataGasto) AS mes_num,
         DATE_FORMAT(dataGasto, '%m/%Y') AS mes_label,
@@ -134,6 +160,107 @@ function gastosMes(ano){
     return database.executar(instrucao);
 }
 
+function percentualTipo(dataInicial, dataFinal) {
+    console.log("---------Entrei no model percentual por tipo---------");
+
+    var instrucao =
+        `
+    SELECT 
+    t.titulo AS tipo,
+    ROUND(
+        SUM(r.valor) 
+        / (
+            SELECT SUM(valor)
+            FROM registros
+            WHERE dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+        ) * 100
+      , 2) AS percentual
+    FROM registros r
+    JOIN tipo t ON r.fkTipo = t.id
+    WHERE r.dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+    GROUP BY t.titulo
+    ORDER BY percentual DESC;
+    `
+
+    return database.executar(instrucao);
+
+}
+
+function maiorGasto(dataInicial, dataFinal) {
+    console.log("---------Entrei no model maior gasto tipo---------");
+
+    var instrucao =
+        `
+        SELECT 
+        r.id,
+        r.tituloGasto,
+        t.titulo AS tipo,
+        r.valor,
+        r.dataGasto
+    FROM registros r
+    JOIN tipo t ON r.fkTipo = t.id
+    WHERE r.dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+    ORDER BY r.valor DESC
+    LIMIT 1;
+    `
+
+    return database.executar(instrucao);
+}
+
+function gastoTotalMes(ano,mes) {
+    console.log("---------Entrei no model gasto total por mês---------");
+
+    var instrucao =
+        `
+    SELECT
+    (SELECT IFNULL(SUM(valor), 0)
+     FROM registros
+     WHERE dataGasto BETWEEN
+           DATE('${ano}-${mes}-20')
+       AND DATE_SUB(
+             DATE_ADD(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH),
+             INTERVAL 1 DAY
+           )
+    ) AS total_atual,
+
+    (SELECT IFNULL(SUM(valor), 0)
+     FROM registros
+     WHERE dataGasto BETWEEN
+           DATE_SUB(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH)
+       AND DATE_SUB(DATE('${ano}-${mes}-20'), INTERVAL 1 DAY)
+    ) AS total_anterior;
+
+    `
+    return database.executar(instrucao);
+}
+
+function gastoTotalAno(ano) {
+    console.log("---------Entrei no model gasto total por mês---------");
+
+    var instrucao =
+        `
+SELECT
+    (SELECT IFNULL(SUM(valor), 0)
+     FROM registros
+     WHERE dataGasto BETWEEN
+           DATE('${ano}-01-20')
+       AND DATE_SUB(
+             DATE_ADD(DATE('${ano}-01-20'), INTERVAL 12 MONTH),
+             INTERVAL 1 DAY
+           )
+    ) AS total_atual,
+
+    (SELECT IFNULL(SUM(valor), 0)
+     FROM registros
+     WHERE dataGasto BETWEEN
+           DATE_SUB(DATE('${ano}-01-20'), INTERVAL 12 MONTH)
+       AND DATE_SUB(DATE('${ano}-01-20'), INTERVAL 1 DAY)
+    ) AS total_anterior;
+
+
+    `
+    return database.executar(instrucao);
+}
 module.exports = {
     registrar,
     adicionarTipo,
@@ -146,5 +273,10 @@ module.exports = {
     carregarRegistros,
     buscarData,
     quantidadeTipo,
-    gastosMes
+    gastosMes,
+    gastosAno,
+    percentualTipo,
+    maiorGasto,
+    gastoTotalMes,
+    gastoTotalAno
 }

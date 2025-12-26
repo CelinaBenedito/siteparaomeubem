@@ -56,7 +56,25 @@ router.get("/quantidadeTipo", function(req,res){
 })
 
 router.get("/gastosMes/:ano", function(req,res){
+    registrosController.gastosAno(req,res);
+});
+router.get("/gastosDia/:ano/:mes", function(req,res){
     registrosController.gastosMes(req,res);
+});
+
+router.get("/percentualTipo", function(req,res){
+    registrosController.percentualTipo(req,res);
+});
+
+router.get("/maiorGasto", function(req,res){
+    registrosController.maiorGasto(req,res);
+});
+
+router.get("/gastoTotalAno/:ano", function(req,res){
+    registrosController.gastoTotalAno(req,res);
+});
+router.get("/gastoTotalMes/:ano/:mes", function(req,res){
+    registrosController.gastoTotalMes(req,res);
 });
 
 module.exports = router;

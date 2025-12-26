@@ -119,12 +119,72 @@ function quantidadeTipo(req,res){
     })
 }
 
+function gastosAno(req,res){
+    var ano = req.params.ano;
+
+    registrosModel.gastosAno(ano).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de gastos por ano bem sucedida! ", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
 function gastosMes(req,res){
     var ano = req.params.ano;
-    registrosModel.gastosMes(ano).then(function(resposta){
+    var mes = req.params.mes;
+
+    registrosModel.gastosMes(ano,mes).then(function(resposta){
         res.status(200).send(resposta);
         console.log("Busca de gastos por mês bem sucedida! ", resposta)
     }).catch(function(erro){
+        console.log("Erro na busca de gastos por mês!", erro)
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
+function percentualTipo(req,res){
+    dataInicial = 0;
+    dataFinal = 0;
+    registrosModel.percentualTipo(dataInicial, dataFinal).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de percentual dos tipos por periodo bem sucedida!", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
+function maiorGasto(req,res){
+    dataInicial = 0;
+    dataFinal = 0;
+    registrosModel.maiorGasto(dataInicial,dataFinal).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de maior gasto por periodo bem sucedida!", resposta)
+    }).catch(function(erro){
+        console.log("Erro na busca por maior gasto por tipo no periodo!")
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function gastoTotalAno(req,res){
+    ano = req.params.ano;
+    registrosModel.gastoTotalAno(ano).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de gasto total do mês bem sucedida!", resposta)
+    }).catch(function(erro){
+        console.log("Erro na busca de gasto do mês total!", erro)
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
+function gastoTotalMes(req,res){
+    ano = req.params.ano;
+    mes = req.params.mes;
+    registrosModel.gastoTotalMes(ano,mes).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de gasto total do ano bem sucedida!", resposta)
+    }).catch(function(erro){
+        console.log("Erro na busca de gasto do ano total!")
         res.status(500).json(erro.sqlMessage);
     })
 }
@@ -142,5 +202,10 @@ mostrarTodasInstituicoes,
 carregarRegistros,
 buscarData,
 quantidadeTipo,
-gastosMes
+gastosMes,
+gastosAno,
+percentualTipo,
+maiorGasto,
+gastoTotalAno,
+gastoTotalMes
 }

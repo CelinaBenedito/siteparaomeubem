@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body onload="gerarGraficos()">
+<body onload="gerarInformações()">
     <div class="containerGeral">
         <nav class="side-bar" id="navbar">
             <ul>
@@ -29,7 +29,11 @@
                             Registros</span></a>
                 </li>
                 <li>
-                    <a href="agendaGastos.html"><i class='bx  bx-calendar-event'></i> <span id="agenda">Agenda</span></a>
+                    <a href="agendaGastos.html"><i class='bx  bx-calendar-event'></i> <span
+                            id="agenda">Agenda</span></a>
+                </li>
+                <li>
+                    <a href="configurações.html"><i class='bx  bx-cog'></i> <span id="config">Configurações</span></a>
                 </li>
             </ul>
         </nav>
@@ -38,30 +42,88 @@
         <div id="main" class="main">
             <h1>Bem Vindo!</h1>
             <button>Ver instituições</button>
-            <div class="containerKPIS" id="containerKPIS">
-                <div class="KPI">
-                    <p>Gasto total do mês atual</p>
-                    <span>R$ 1.842,30</span>
-                    <p><span>🔺+12% em relação a Novembro</span></p>
+            <div id="filtros" class="filtros">
+                <div class="campo">
+                    <select id="select_tempo" onchange="tempo()">
+                        <option value="mes">Mensal</option>
+                        <option value="ano">Anual</option>
+                    </select>
+                    <label>Selecionar periodo de tempo</label>
                 </div>
-                <div class="KPI">
-                    <p>Maior gasto do mês:</p>
-                    <p><span>Alimentação – R$ 620,00</span></p>
-                </div>
-                <div class="KPI">
-                    <p>Categoria que mais impactou:</p>
-                    <span>Transporte (34% do total)</span>
+                <div class="campo">
 
+                    <select id="select_periodo" onchange="periodo()">
+                        <option value="01">Janeiro</option>
+                        <option value="02"> Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+
+                    <label> Selecionar mes</label>
+                </div>
+
+            </div>
+            <div class="containerKPIS" id="containerKPIS">
+                <!-- KPI: Gasto Total -->
+                <div class="KPI">
+                    <div>
+                        <p class="kpi-label">Gasto total do <span id="dataKPIgastoTotal">ano</span> atual</p>
+                        <span class="gasto-valor" id="gastoTotal">R$ 1.842,30</span>
+                    </div>
+                    <div>
+                        <span class="badge-delta" id="percentual">erro</span>
+                        <span class="subtexto" id="subtexto">em relação a Novembro</span>
+                    </div>
+                </div>
+
+                <!-- KPI: Maior Gasto -->
+                <div class="KPI KPI-maior-gasto">
+                    <div>
+                        <p class="kpi-label">Maior gasto do ano</p>
+                        <p class="categoria-nome" id="categoria">Alimentação</p>
+                        <p class="valor-destaque" id="valorCategoria">R$ 620,00</p>
+                        <p class="subtexto" id="tituloGasto" style="font-weight: 700; text-transform: uppercase; font-size: 10px;">do
+                                total</p>
+                    </div>
+                </div>
+
+                <!-- KPI: Categoria de Impacto -->
+                <div class="KPI">
+                    <p class="kpi-label">Categoria que mais impactou</p>
+
+                    <div class="impacto-container">
+                        <div>
+                            <span class="impactoKPI" id="percentualKPItipo">Transporte</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="valorKPItipo" id="valorKPItipo">34%</span>
+                            <p class="subtexto" style="font-weight: 700; text-transform: uppercase; font-size: 10px;">do
+                                total</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="containerGraficos">
                 <div id="graficoTipo" class="grafico"></div>
                 <div id="graficoDonut" class="grafico"></div>
                 <div id="graficoTemporal" class="grafico"></div>
-
+                <div id="graficoComparacao" class="grafico"></div>
             </div>
+
         </div>
     </div>
+    <footer>
+        <a href="teamo.html">Te amo meu bem</a>
+    </footer>
 </body>
 
 </html>

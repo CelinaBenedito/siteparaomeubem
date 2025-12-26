@@ -4,6 +4,7 @@ const home = document.getElementById("home");
 const reg = document.getElementById("reg");
 const add = document.getElementById("add");
 const agenda = document.getElementById("agenda");
+const config = document.getElementById("config");
 
 let ativo = false;
 
@@ -12,6 +13,7 @@ home.style.display = "none";
 reg.style.display = "none";
 add.style.display = "none";
 agenda.style.display = "none";
+config.style.display = "none"
 main.style.marginLeft = "70px";
 
 function sidebarFunction() {
@@ -26,6 +28,8 @@ function sidebarFunction() {
         reg.style.display = "";
         add.style.display = "";
         agenda.style.display = "";
+        config.style.display = ""
+
 
         console.log("Abriu", ativo);
 
@@ -38,6 +42,8 @@ function sidebarFunction() {
         reg.style.display = "none";
         add.style.display = "none";
         agenda.style.display = "none";
+        config.style.display = "none"
+
 
         console.log("Fechou", ativo);
     }
