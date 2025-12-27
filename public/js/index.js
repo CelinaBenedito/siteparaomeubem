@@ -11,8 +11,8 @@ function tempo() {
   else if (valorSelect == "mes") {
     const hoje = new Date();
     ano = hoje.getFullYear();
-    mes = hoje.getMonth() +1;
-    tempoAnalisado = {ano, mes}
+    mes = hoje.getMonth() + 1;
+    tempoAnalisado = { ano, mes }
 
     gastosMes(tempoAnalisado);
     buscarGastoTotal(tempoAnalisado);
@@ -60,7 +60,7 @@ function gerarGraficos(periodo) {
   });
   gerarTipos(periodo);
   percentualTipo(periodo)
-  graficoComparacao([10, 20, 356, 13, 121], [50, 90, 2346, 113, 1221], ["jan", "fev", "mar", "abr", "mai"]);
+  graficoComparacao([10, 20, 356, 13, 121], [50, 90, 246, 113, 1221], ["jan", "fev", "mar", "abr", "mai"]);
 }
 
 function buscarMaiorGasto(dataInicial, dataFinal) {
@@ -82,16 +82,29 @@ function buscarGastoTotal(periodo) {
   console.log("Entrei em buscarGastoTotal")
   let url = '';
   let div_titulo = document.getElementById('dataKPIgastoTotal');
+  let labelComparacao = "";
 
   if (typeof periodo === 'number') {
     console.log("Ano identificado")
     url = `/registros/gastoTotalAno/${periodo}`;
     div_titulo.innerHTML = "ano"
+
+    labelComparacao = `${periodo - 1}`;
   }
   else if (typeof periodo === 'object') {
     console.log("Mês identificado")
     url = `/registros/gastoTotalMes/${periodo.ano}/${periodo.mes}`;
     div_titulo.innerHTML = "mês"
+
+    let mesAnterior = periodo.mes - 1;
+    let anoAnterior = periodo.ano;
+
+    if (mesAnterior === 0) {
+      mesAnterior = 12;
+      anoAnterior--;
+    }
+
+    labelComparacao = `${nomeMes(mesAnterior)}`;
 
   }
 
@@ -121,19 +134,16 @@ function buscarGastoTotal(periodo) {
         diferença_percentual = ((diferenca / json[0].total_anterior) * 100).toFixed(2);
         if (diferença_percentual > 0) {
           div_percentual.style.display = ""
-          div_subtexto.innerHTML = `Em relação ao mês de `
-
           div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}`
         }
         else if (diferença_percentual < 0) {
           div_percentual.style.display = ""
-          div_subtexto.innerHTML = `Em relação ao mês de `
-
-
+          div_percentual
           div_percentual.innerHTML = `<i class='bx  bx-caret-big-down'></i> ${diferença_percentual}`
         }
 
       }
+      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
     })
 }
 
