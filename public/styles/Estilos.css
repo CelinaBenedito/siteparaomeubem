@@ -50,6 +50,10 @@
     z-index: 10000;
 }
 
+.alerta a{
+    text-decoration: none;
+}
+
 .conteudoAlerta {
     display: flex;
     background: var(--cor-fundo-card);
@@ -654,9 +658,42 @@ footer a {
 }
 
 .filtros select {
-    width: 150px;
+    width: 170px;
 }
 
 .filtros .campo label {
     background-color: var(--cor-fundo-pagina);
+}
+.label-data {
+    font-size: 14px;
+    color: var(--cor-texto-alternativo);
+    margin-bottom: 4px;
+}
+
+.dataSelecionada {
+    margin-top: 6px;
+    padding: 10px 14px;
+    width: fit-content;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--teal-escuro);
+
+    background-color: var(--cor-fundo-card);
+    border: 1px solid var(--teal-claro);
+    border-left: 5px solid var(--teal-escuro);
+    border-radius: 10px;
+
+    box-shadow: 0 6px 16px var(--sombra-card);
+
+    opacity: 0;
+    transform: translateY(6px);
+    animation: aparecerData 0.3s ease forwards;
+}
+
+@keyframes aparecerData {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

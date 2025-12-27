@@ -64,14 +64,13 @@ async function controleInstituicao(){
 }
 
 function registrar() {
+    ("Iniciando registro!")
     var data = dataGasto;
-    var valor = Number(ipt_valor.value);
+    var valor = Number(document.getElementById('ipt_valor').value);
     var titulo = ipt_nome.value;
     var tipo = select_tipo.value;
     var Desc = ipt_desc.value;
     var instituicao = select_instituicao.value
-
-    console.log('Cliquei em registrar')
 
     if (Desc == "" || Desc == false) {
         Desc = "Nenhuma descrição fornecida"
@@ -79,7 +78,7 @@ function registrar() {
     if (data == false || data == 0) {
         return alert("Data inválida");
     }
-    if (valor <= 0) {
+    if (valor <= 0 || valor == null || valor == undefined || valor == NaN) {
         return alert("Valor inválido");
     }
     if (titulo == "") {
@@ -119,10 +118,6 @@ function registrar() {
                 `  
                         Registro realizado com sucesso!<br>
                         <div>
-
-                        <a href="registros.html">
-                            <button>Ver registros</button>
-                        </a>
 
                         <button onclick='window.location.reload()'>
                             Continuar a registrar
@@ -278,6 +273,7 @@ function gerarCalendario() {
 }
 
 async function selecionarDia(data, elemento) {
+    dataP = document.getElementById('data')
     dataSelecionada = data;
 
     document.querySelectorAll(".diaSelecionado")
@@ -308,13 +304,20 @@ async function selecionarDia(data, elemento) {
 }
 
 confirmar.onclick = () => {
-    alert("Dia selecionado: " + dataSelecionada);
     modal.style.display = "none";
+    dataP.style.display = ""
+    dataFormatada = formatarDataBR(dataSelecionada)
+    dataP.textContent = dataFormatada
+    dataP.classList.remove("hidden");
     dataGasto = dataSelecionada;
 };
 
 gerarCalendario();
 
+function formatarDataBR(dataISO) {
+    const [ano, mes, dia] = dataISO.split("-");
+    return `${dia}/${mes}/${ano}`;
+}
 
 /*---------------- Parte do Header ----------------*/
 const titulos = document.querySelectorAll(".headerFormulario .titulo");
@@ -346,3 +349,5 @@ function trocarFormulario(tela) {
     }
 
 }
+
+

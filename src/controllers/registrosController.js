@@ -106,6 +106,7 @@ registrosModel.buscarData(data).then(function(resposta){
     res.status(200).send(resposta);
     console.log("Busca de data feita com sucesso!", resposta)
 }).catch(function(erro){
+    console.log("Erro ao buscar data!", erro)
     res.status(500).json(erro.sqlMessage);
 })
 }

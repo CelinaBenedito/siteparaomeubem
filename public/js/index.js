@@ -134,16 +134,19 @@ function buscarGastoTotal(periodo) {
         diferença_percentual = ((diferenca / json[0].total_anterior) * 100).toFixed(2);
         if (diferença_percentual > 0) {
           div_percentual.style.display = ""
-          div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}`
+          div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}%`
+      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
+
         }
         else if (diferença_percentual < 0) {
           div_percentual.style.display = ""
           div_percentual
-          div_percentual.innerHTML = `<i class='bx  bx-caret-big-down'></i> ${diferença_percentual}`
+          div_percentual.innerHTML = `<i class='bx  bx-caret-big-down'></i> ${diferença_percentual}%`
+      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
+
         }
 
       }
-      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
     })
 }
 
