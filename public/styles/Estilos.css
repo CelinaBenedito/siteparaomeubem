@@ -12,6 +12,8 @@
     --sombra-card: rgba(54, 115, 115, 0.099);
     --red-700: #b91c1c;
     --red-100: #fee2e2;
+    --green-700: #15803d;
+    --green-100: #d1fae5;
 }
 
 * {
@@ -50,7 +52,7 @@
     z-index: 10000;
 }
 
-.alerta a{
+.alerta a {
     text-decoration: none;
 }
 
@@ -664,6 +666,7 @@ footer a {
 .filtros .campo label {
     background-color: var(--cor-fundo-pagina);
 }
+
 .label-data {
     font-size: 14px;
     color: var(--cor-texto-alternativo);

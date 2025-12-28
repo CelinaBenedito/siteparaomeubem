@@ -132,17 +132,26 @@ function buscarGastoTotal(periodo) {
 
         diferenca = (json[0].total_atual - json[0].total_anterior).toFixed(2);
         diferença_percentual = ((diferenca / json[0].total_anterior) * 100).toFixed(2);
+        const root = document.documentElement;
         if (diferença_percentual > 0) {
+          const corFundo = getComputedStyle(root).getPropertyValue('--red-700');
+          const corTexto = getComputedStyle(root).getPropertyValue('--red-100');
           div_percentual.style.display = ""
-          div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}%`
-      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
+          div_percentual.style.backgroundColor = corFundo;
+          div_percentual.style.color = corTexto
+            div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}%`
+          div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
 
         }
         else if (diferença_percentual < 0) {
+          const corFundo = getComputedStyle(root).getPropertyValue('--green-700');
+          const corTexto = getComputedStyle(root).getPropertyValue('--green-100');
           div_percentual.style.display = ""
-          div_percentual
+          div_percentual.style.backgroundColor = corFundo;
+          div_percentual.style.color = corTexto
+          
           div_percentual.innerHTML = `<i class='bx  bx-caret-big-down'></i> ${diferença_percentual}%`
-      div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
+          div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
 
         }
 
