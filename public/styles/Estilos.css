@@ -637,6 +637,7 @@ body.dark-mode {
 }
 
 footer {
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -717,4 +718,109 @@ footer a {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.aviso {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background-color: var(--cor-fundo-card);
+    border-radius: 12px;
+    box-shadow: 2px 2px 15px var(--sombra-card);
+
+    text-align: center;
+    padding: 20px;
+
+    animation: fadeInAviso 0.3s ease;
+}
+
+.aviso i {
+    font-size: 3.5rem;
+    color: var(--red-700);
+    opacity: 0.9;
+}
+
+.aviso h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--cor-texto-escuro);
+}
+
+.aviso p {
+    font-size: 0.9rem;
+    color: var(--cor-texto-secundario);
+    max-width: 240px;
+}
+
+.campo-grafico {
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.titulo-grafico {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cor-texto-escuro);
+}
+
+.titulo-grafico span {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.tooltip-icon {
+    font-size: 1rem;
+    color: var(--cor-texto-secundario);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.tooltip-icon:hover {
+    color: var(--teal-escuro);
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    top: 120%;
+    left: 0;
+
+    background-color: var(--cor-fundo-card);
+    color: var(--cor-texto-secundario);
+
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    max-width: 240px;
+
+    box-shadow: 0 6px 16px var(--sombra-card);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
+
+    z-index: 10;
+}
+
+.tooltip-icon:hover + .tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }

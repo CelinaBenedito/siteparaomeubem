@@ -99,15 +99,36 @@ function buscarData(data) {
     return database.executar(instrucao);
 }
 
-function quantidadeTipo() {
-    console.log("---------Entrei no model quantidade por tipo---------");
+function quantidadeTipoAno(ano) {
+    console.log("---------Entrei no model quantidade por tipo no ano---------");
     var instrucao =
         `
-        SELECT 
+   	SELECT 
         t.titulo,
         COUNT(r.id) AS qtd
     FROM registros r
     JOIN tipo t ON t.id = r.fkTipo
+    WHERE r.dataGasto BETWEEN '${ano}-01-01' AND '${ano}-12-31'
+    GROUP BY t.titulo;
+    `
+
+    return database.executar(instrucao);
+}
+
+function quantidadeTipoMes(ano,mes) {
+    console.log("---------Entrei no model quantidade por tipo no mês---------");
+    var instrucao =
+        `
+        	SELECT 
+        t.titulo,
+        COUNT(r.id) AS qtd
+    FROM registros r
+    JOIN tipo t ON t.id = r.fkTipo
+    WHERE r.dataGasto BETWEEN
+    DATE('${ano}-${mes}-20')
+		AND DATE_SUB(
+        DATE_ADD(DATE('${ano}-${mes}-20'),INTERVAL 1 MONTH),
+        INTERVAL 1 DAY)
     GROUP BY t.titulo;
     `
 
@@ -160,7 +181,7 @@ function gastosAno(ano) {
     return database.executar(instrucao);
 }
 
-function percentualTipo(dataInicial, dataFinal) {
+function percentualTipoAno(ano) {
     console.log("---------Entrei no model percentual por tipo---------");
 
     var instrucao =
@@ -172,12 +193,47 @@ function percentualTipo(dataInicial, dataFinal) {
         / (
             SELECT SUM(valor)
             FROM registros
-            WHERE dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+            WHERE dataGasto BETWEEN '${ano}-01-01' AND '${ano}-12-31'
         ) * 100
       , 2) AS percentual
     FROM registros r
     JOIN tipo t ON r.fkTipo = t.id
-    WHERE r.dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+    WHERE r.dataGasto BETWEEN '${ano}-01-01' AND '${ano}-12-31'
+    GROUP BY t.titulo
+    ORDER BY percentual DESC;
+    `
+
+    return database.executar(instrucao);
+
+}
+function percentualTipoMes(ano,mes) {
+    console.log("---------Entrei no model percentual por tipo---------");
+
+    var instrucao =
+        `
+    SELECT 
+    t.titulo AS tipo,
+    ROUND(
+        SUM(r.valor) 
+        / (
+            SELECT SUM(valor)
+            FROM registros r
+            WHERE r.dataGasto BETWEEN 
+        DATE('${ano}-${mes}-20')
+       AND DATE_SUB(
+             DATE_ADD(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH),
+             INTERVAL 1 DAY
+             )
+        ) * 100
+      , 2) AS percentual
+    FROM registros r
+    JOIN tipo t ON r.fkTipo = t.id
+    WHERE r.dataGasto BETWEEN 
+        DATE('${ano}-${mes}-20')
+       AND DATE_SUB(
+             DATE_ADD(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH),
+             INTERVAL 1 DAY
+             )
     GROUP BY t.titulo
     ORDER BY percentual DESC;
     `
@@ -186,8 +242,8 @@ function percentualTipo(dataInicial, dataFinal) {
 
 }
 
-function maiorGasto(dataInicial, dataFinal) {
-    console.log("---------Entrei no model maior gasto tipo---------");
+function maiorGastoAno(ano) {
+    console.log("---------Entrei no model maior gasto categoria por ano---------");
 
     var instrucao =
         `
@@ -199,7 +255,33 @@ function maiorGasto(dataInicial, dataFinal) {
         r.dataGasto
     FROM registros r
     JOIN tipo t ON r.fkTipo = t.id
-    WHERE r.dataGasto BETWEEN '2025-01-01' AND '2025-12-31'
+    WHERE r.dataGasto BETWEEN '${ano}-01-01' AND '${ano}-12-31'
+    ORDER BY r.valor DESC
+    LIMIT 1;
+    `
+
+    return database.executar(instrucao);
+}
+
+function maiorGastoMes(ano,mes) {
+    console.log("---------Entrei no model maior gasto categoria por ano---------");
+
+    var instrucao =
+        `
+        SELECT 
+        r.id,
+        r.tituloGasto,
+        t.titulo AS tipo,
+        r.valor,
+        r.dataGasto
+    FROM registros r
+    JOIN tipo t ON r.fkTipo = t.id
+    WHERE r.dataGasto BETWEEN 
+        DATE('${ano}-${mes}-20')
+       AND DATE_SUB(
+             DATE_ADD(DATE('${ano}-${mes}-20'), INTERVAL 1 MONTH),
+             INTERVAL 1 DAY
+             )
     ORDER BY r.valor DESC
     LIMIT 1;
     `
@@ -235,7 +317,7 @@ function gastoTotalMes(ano,mes) {
 }
 
 function gastoTotalAno(ano) {
-    console.log("---------Entrei no model gasto total por mês---------");
+    console.log("---------Entrei no model gasto total por ano---------");
 
     var instrucao =
         `
@@ -272,11 +354,14 @@ module.exports = {
     mostrarTodasInstituicoes,
     carregarRegistros,
     buscarData,
-    quantidadeTipo,
+    quantidadeTipoMes,
+    quantidadeTipoAno,
     gastosMes,
     gastosAno,
-    percentualTipo,
-    maiorGasto,
+    percentualTipoAno,
+    percentualTipoMes,
+    maiorGastoMes,
+    maiorGastoAno,
     gastoTotalMes,
     gastoTotalAno
 }

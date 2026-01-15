@@ -40,20 +40,24 @@ router.post("/adicionarSaldo", function(req,res){
 router.get("/mostrarSaldoTotal", function(req,res){
     registrosController.mostrarSaldoTotal(req,res);
     console.log("Entrei no router mostrar saldo total")
-})
+});
 
 router.get("/mostrarTodasInstituicoes", function(req,res){
     registrosController.mostrarTodasInstituicoes(req,res);
     
-})
+});
 
 router.get("/carregarRegistros", function(req,res){
     registrosController.carregarRegistros(req,res);
-})
+});
 
-router.get("/quantidadeTipo", function(req,res){
-    registrosController.quantidadeTipo(req,res);
-})
+router.get("/quantidadeTipoAno/:ano", function(req,res){
+    registrosController.quantidadeTipoAno(req,res);
+});
+
+router.get("/quantidadeTipoMes/:ano/:mes", function(req,res){
+    registrosController.quantidadeTipoMes(req,res);
+});
 
 router.get("/gastosMes/:ano", function(req,res){
     registrosController.gastosAno(req,res);
@@ -62,12 +66,19 @@ router.get("/gastosDia/:ano/:mes", function(req,res){
     registrosController.gastosMes(req,res);
 });
 
-router.get("/percentualTipo", function(req,res){
-    registrosController.percentualTipo(req,res);
+router.get("/percentualTipoAno/:ano", function(req,res){
+    registrosController.percentualTipoAno(req,res);
+});
+router.get("/percentualTipoMes/:ano/:mes", function(req,res){
+    registrosController.percentualTipoMes(req,res);
 });
 
-router.get("/maiorGasto", function(req,res){
-    registrosController.maiorGasto(req,res);
+router.get("/maiorGastoAno/:ano", function(req,res){
+    registrosController.maiorGastoAno(req,res);
+});
+
+router.get("/maiorGastoMes/:ano/:mes", function(req,res){
+    registrosController.maiorGastoMes(req,res);
 });
 
 router.get("/gastoTotalAno/:ano", function(req,res){

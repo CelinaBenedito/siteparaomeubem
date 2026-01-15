@@ -83,7 +83,7 @@
                         <option value="2025">2025</option>
                         <option value="2026">2026</option>
                     </select>
-                <label>Selecionar o ano</label>
+                    <label>Selecionar o ano</label>
                 </div>
             </div>
             <div class="containerKPIS" id="containerKPIS">
@@ -128,12 +128,46 @@
             </div>
 
             <div class="containerGraficos">
-                <div id="graficoTipo" class="grafico"></div>
-                <div id="graficoDonut" class="grafico"></div>
-                <div id="graficoTemporal" class="grafico"></div>
+                <div class="campo-grafico">
+                    <div class="titulo-grafico">
+                        <span>Categorias utilizadas</span>
+                        <i class='bx bx-info-circle tooltip-icon'></i>
+
+                        <div class="tooltip">
+                            Mostra quantas vezes cada categoria apareceu no período selecionado.
+                        </div>
+                    </div>
+
+                    <div id="graficoTipo" class="grafico"></div>
+                </div>
+
+                <div class="campo-grafico">
+
+                    <div class="titulo-grafico">
+                        <span>Porcentagem do total por categoria</span>
+                        <i class='bx bx-info-circle tooltip-icon'></i>
+                        <div class="tooltip">
+                            Exibe quanto cada categoria representa do total de gastos no período analisado.
+                        </div>
+                    </div>
+                    
+                    <div id="graficoDonut" class="grafico"></div>
+                </div>
+                <div class="campo-grafico">
+
+                    <div class="titulo-grafico">
+                        <span>Evolução dos gastos no tempo</span>
+                        <i class='bx bx-info-circle tooltip-icon'></i>
+                        <div class="tooltip">
+                            Permite visualizar como os gastos variaram ao longo do tempo dentro do período selecionado.
+                        </div>
+                    </div>
+
+                    <div id="graficoTemporal" class="grafico"></div>
+                </div>
+
                 <div id="graficoComparacao" class="grafico"></div>
             </div>
-
         </div>
     </div>
     <footer>

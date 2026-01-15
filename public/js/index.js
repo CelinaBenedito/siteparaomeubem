@@ -1,13 +1,17 @@
-
-let periodoAtual = {
-  tipo: 'mes', // 'mes' | 'ano'
-  ano: new Date().getFullYear(),
-  mes: new Date().getMonth() + 1
-};
-
-function atualizarDados(periodo){
-    gastosMes(periodo)
-    buscarGastoTotal(periodo)
+const semDados =
+  `
+        <div class="aviso">
+        <h1>Sem Dados</h1>
+        <i class='bx  bx-alert-triangle'></i> 
+        <p>Selecionar outra data para visualizar o gráfico<p>
+        </div>
+`
+function atualizarDados(periodo) {
+  gastosMes(periodo)
+  buscarGastoTotal(periodo)
+  buscarMaiorGasto(periodo)
+  gerarTipos(periodo)
+  percentualTipo(periodo)
 }
 
 function tempo() {
@@ -21,8 +25,8 @@ function tempo() {
     div_ano = document.getElementById('div_ano');
     visualizaçãoPeriodo.style.display = "none"
 
-    div_ano.innerHTML = 
-    `
+    div_ano.innerHTML =
+      `
       <select id="anoAnalisado" onchange="periodoAnual()">
         <option value="#">Selecionar ano</option>
         <option value="2025">2025</option>
@@ -39,8 +43,8 @@ function tempo() {
     visualizaçãoPeriodo.style.display = ""
     atualizarDados(tempoAnalisado)
 
-    div_ano.innerHTML = 
-    `
+    div_ano.innerHTML =
+      `
        <select id="anoAnalisado" onchange="periodo()">
           <option value="#">Selecionar ano</option>
           <option value="2025">2025</option>
@@ -71,49 +75,81 @@ function periodo() {
 }
 
 function gerarInformações() {
-
+  console.log("Gerando informações iniciais")
   const hoje = new Date();
   ano = hoje.getFullYear();
   mes = hoje.getMonth() + 1
   tempoAnalisado = { ano, mes }
-  console.log("gerando informações para o mês", mes)
-  gerarKPIS(tempoAnalisado).then(gerarGraficos(tempoAnalisado))
+  gerarKPIS(tempoAnalisado).then(() => gerarGraficos(tempoAnalisado))
 }
+
 async function gerarKPIS(periodo) {
-  console.log("Gerando KPIS para o mês: ", periodo)
-  buscarMaiorGasto(periodo);
-  buscarGastoTotal(periodo);
+  console.log("Iniciando geração de KPI's")
+
+  await Promise.all([
+    buscarMaiorGasto(periodo),
+    buscarGastoTotal(periodo),
+    percentualTipo(periodo)
+  ]);
 }
 
 function gerarGraficos(periodo) {
   console.log("Iniciando geração de gráficos")
-
-  const hoje = new Date();
-
-  gastosMes({
-    ano: hoje.getFullYear(),
-    mes: hoje.getMonth() + 1
-  });
+  gastosMes(periodo);
   gerarTipos(periodo);
-  percentualTipo(periodo)
   graficoComparacao([10, 20, 356, 13, 121], [50, 90, 246, 113, 1221], ["jan", "fev", "mar", "abr", "mai"]);
 }
+//KPI
+function buscarMaiorGasto(periodo) {
+  let url = '';
 
-function buscarMaiorGasto(dataInicial, dataFinal) {
-  fetch(`/registros/maiorGasto`)
+  if (typeof periodo === 'number') {
+    console.log("Ano identificado")
+    url = `/registros/maiorGastoAno/${periodo}`;
+    kpiMaiorGastoTitulo.innerHTML = "ano"
+
+    labelComparacao = `${periodo - 1}`;
+  }
+  else if (typeof periodo === 'object') {
+    console.log("Mês identificado")
+    url = `/registros/maiorGastoMes/${periodo.ano}/${periodo.mes}`;
+    kpiMaiorGastoTitulo.innerHTML = "mês"
+
+    let mesAnterior = periodo.mes - 1;
+    let anoAnterior = periodo.ano;
+
+    if (mesAnterior === 0) {
+      mesAnterior = 12;
+      anoAnterior--;
+    }
+    labelComparacao = `${nomeMes(mesAnterior)}`;
+  }
+  console.log("Iniciando fetch na kpi de maior categoria...")
+  return fetch(url)
     .then(res => res.json())
     .then(json => {
+      console.log("Dentro do fetch da maior categoria\nJson:", json[0])
+
       let categoria = document.getElementById('categoria');
       let valorCategoria = document.getElementById('valorCategoria');
       let tituloGasto = document.getElementById('tituloGasto')
 
-      categoria.innerHTML = json[0].tituloGasto;
-      valorCategoria.innerHTML = `R$ ${json[0].valor}`
-      tituloGasto.innerHTML = `Categoria: ${json[0].tipo}`
+      if (!json || json.length === 0) {
+        categoria.innerHTML = "Sem dados";
+        valorCategoria.innerHTML = "Sem dados";
+        tituloGasto.innerHTML = "Categoria: Sem dados";
+        return;
+      } else {
+        categoria.innerHTML = json[0].tituloGasto;
+        valorCategoria.innerHTML = `R$ ${json[0].valor}`
+        tituloGasto.innerHTML = `Categoria: ${json[0].tipo}`
+      }
+
 
     })
 }
 
+//KPI
 function buscarGastoTotal(periodo) {
   console.log("Entrei em buscarGastoTotal")
   let url = '';
@@ -127,7 +163,7 @@ function buscarGastoTotal(periodo) {
 
     labelComparacao = `${periodo - 1}`;
   }
-  else if (typeof periodo === 'object') {
+  else if (periodo && typeof periodo === 'object') {
     console.log("Mês identificado")
     url = `/registros/gastoTotalMes/${periodo.ano}/${periodo.mes}`;
     div_titulo.innerHTML = "mês"
@@ -195,23 +231,40 @@ function buscarGastoTotal(periodo) {
     })
 }
 
-function gerarTipos() {
+//GRÁFICO
+function gerarTipos(periodo) {
+  let url = ''
   let dados = [];
   let labels = [];
 
-  fetch("/registros/quantidadeTipo")
+  // 📅 Ano
+  if (typeof periodo === 'number') {
+    url = `/registros/quantidadeTipoAno/${periodo}`;
+  }
+  if (typeof periodo === 'object') {
+    url = `/registros/quantidadeTipoMes/${periodo.ano}/${periodo.mes}`;
+  }
+
+  fetch(url)
     .then(res => res.json())
     .then(json => {
+      console.log("Dentro do fetch do gráfico de barra dos tipos")
+      if (!json || json.length === 0) {
+        graficoTipo.innerHTML = semDados
+        return;
+      }
+      graficoTipo.innerHTML = ""
 
       for (let c = 0; json.length > c; c++) {
         dados.push(json[c].qtd);
         labels.push(json[c].titulo);
       }
+      console.log("Dados do gráfico de barra dos tipos:", dados)
 
       criarGrafico(
         350,
         'bar',
-        'Quantidade por Tipo',
+        "Quantidade por categoria",
         dados,
         labels,
         'graficoTipo'
@@ -219,18 +272,19 @@ function gerarTipos() {
     });
 }
 
+//GRÁFICO
 async function gastosMes(param) {
   let url = '';
   let titulo = '';
   let tipoLabel = ''; // 'mes' ou 'dia'
 
-  // 📅 Ano inteiro → meses
+  // 📅 Ano
   if (typeof param === 'number') {
     url = `/registros/gastosMes/${param}`;
     titulo = 'Gasto por mês';
     tipoLabel = 'mes';
   }
-  // 📆 Mês específico → dias
+  // 📆 Mês
   else if (typeof param === 'object') {
     url = `/registros/gastosDia/${param.ano}/${param.mes}`;
     titulo = 'Gasto por dia';
@@ -242,7 +296,11 @@ async function gastosMes(param) {
     .then(json => {
       const dados = [];
       const labels = [];
-
+      if (!json || json.length === 0) {
+        graficoTemporal.innerHTML = semDados
+        return;
+      }
+      graficoTemporal.innerHTML = ""
       json.forEach(item => {
         const valor = Math.round(item.total_gasto * 100) / 100;
         dados.push(valor);
@@ -276,16 +334,34 @@ async function gastosMes(param) {
     });
 }
 
-
+//KPI e GRÁFICO
 function percentualTipo(periodo) {
   kpiTipo = document.getElementById('percentualKPItipo')
   valorKPI = document.getElementById('valorKPItipo')
   const dados = [];
   const labels = [];
+// 📅 Ano
+  if (typeof periodo === 'number') {
+    console.log("Mês identificado no percentual por categoria")
+    url = `/registros/percentualTipoAno/${periodo}`;
+  }
+  // 📅 Mês
+  else if (periodo && typeof periodo === 'object') {
+    console.log("Ano identificado no percentual por categoria")
+    url = `/registros/percentualTipoMes/${periodo.ano}/${periodo.mes}`;
+  }
 
-  fetch(`/registros/percentualTipo`)
+  fetch(url)
     .then(res => res.json())
     .then(json => {
+
+      if (!json || json.length === 0) {
+        kpiTipo.innerHTML = "Sem dados";
+        valorKPI.innerHTML = "Sem dados";
+        graficoDonut.innerHTML = semDados
+        return;
+      }
+      graficoDonut.innerHTML = ""
       let maiorTipo = json[0]
       for (let c = 0; json.length > c; c++) {
         dados.push(json[c].percentual);
@@ -352,16 +428,16 @@ function criarGrafico(altura, tipo, nome, dados, labels, div) {
       type: tipo
     },
     fill: {
-          colors: [
-            '#1E4F56', // azul petróleo
-            '#2C6E73', // teal mais escuro
-            '#4F918C', // teal médio
-            '#6FB9B5', // teal claro
-            '#B5E3E0', // gelo suave
-            '#C8ECF0', // azul glacial
-            '#6FAFD6', // azul céu frio
-            '#D8F3F5', // quase branco gelo
-          ]
+      colors: [
+        '#1E4F56', // azul petróleo
+        '#2C6E73', // teal mais escuro
+        '#4F918C', // teal médio
+        '#6FB9B5', // teal claro
+        '#B5E3E0', // gelo suave
+        '#C8ECF0', // azul glacial
+        '#6FAFD6', // azul céu frio
+        '#D8F3F5', // quase branco gelo
+      ]
     },
     series: [{
       name: nome,

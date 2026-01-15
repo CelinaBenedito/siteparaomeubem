@@ -111,8 +111,19 @@ registrosModel.buscarData(data).then(function(resposta){
 })
 }
 
-function quantidadeTipo(req,res){
-    registrosModel.quantidadeTipo().then(function(resposta){
+function quantidadeTipoAno(req,res){
+    let ano = req.params.ano;
+    registrosModel.quantidadeTipoAno(ano).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Buca de quantidade por tipo feita com sucesso!", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+function quantidadeTipoMes(req,res){
+    let ano = req.params.ano;
+    let mes = req.params.mes;
+    registrosModel.quantidadeTipoMes(ano,mes).then(function(resposta){
         res.status(200).send(resposta);
         console.log("Buca de quantidade por tipo feita com sucesso!", resposta)
     }).catch(function(erro){
@@ -144,26 +155,47 @@ function gastosMes(req,res){
     })
 }
 
-function percentualTipo(req,res){
-    dataInicial = 0;
-    dataFinal = 0;
-    registrosModel.percentualTipo(dataInicial, dataFinal).then(function(resposta){
+function percentualTipoAno(req,res){
+    let ano = req.params.ano;
+    registrosModel.percentualTipoAno(ano).then(function(resposta){
         res.status(200).send(resposta);
-        console.log("Busca de percentual dos tipos por periodo bem sucedida!", resposta)
+        console.log("Busca de percentual dos tipos por ano bem sucedida!", resposta)
+    }).catch(function(erro){
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+function percentualTipoMes(req,res){
+    let ano = req.params.ano;
+    let mes = req.params.mes;
+
+    registrosModel.percentualTipoMes(ano, mes).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de percentual dos tipos por mês bem sucedida!", resposta)
     }).catch(function(erro){
         res.status(500).json(erro.sqlMessage);
     })
 }
 
-function maiorGasto(req,res){
-    dataInicial = 0;
-    dataFinal = 0;
-    registrosModel.maiorGasto(dataInicial,dataFinal).then(function(resposta){
+function maiorGastoAno(req,res){
+    ano = req.params.ano;
+    registrosModel.maiorGastoAno(ano).then(function(resposta){
+        res.status(200).send(resposta);
+        console.log("Busca de maior gasto por ano bem sucedida!", resposta)
+    }).catch(function(erro){
+        console.log("Erro na busca por maior gasto por tipo no ano!")
+        res.status(500).json(erro);
+    });
+}
+function maiorGastoMes(req,res){
+    ano = req.params.ano;
+    mes = req.params.mes;
+    registrosModel.maiorGastoMes(ano,mes).then(function(resposta){
         res.status(200).send(resposta);
         console.log("Busca de maior gasto por periodo bem sucedida!", resposta)
     }).catch(function(erro){
-        console.log("Erro na busca por maior gasto por tipo no periodo!")
-        res.status(500).json(erro.sqlMessage);
+        console.log("---------------------Erro aqui forte---------------------")
+        console.log("Erro na busca por maior gasto por tipo no mês!")
+        res.status(500).json(erro);
     });
 }
 
@@ -202,11 +234,14 @@ mostrarSaldoTotal,
 mostrarTodasInstituicoes,
 carregarRegistros,
 buscarData,
-quantidadeTipo,
+quantidadeTipoMes,
+quantidadeTipoAno,
 gastosMes,
 gastosAno,
-percentualTipo,
-maiorGasto,
+percentualTipoMes,
+percentualTipoAno,
+maiorGastoAno,
+maiorGastoMes,
 gastoTotalAno,
 gastoTotalMes
 }
