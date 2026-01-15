@@ -29,9 +29,7 @@ app.use("/registros", registrosRouter);
 
 
 app.listen(PORTA_APP, function () {
-    console.log(`
-    \n\n\n                                                                                                 
-    Oi meu bem, seu site já está rodando na porta .: http://${HOST_APP}:${PORTA_APP} :. \n\n espero que goste :)
-    \n\n ps: te amo muitão
+    console.log(`Site financeiro rodando no caminho .: http://${HOST_APP}:${PORTA_APP} :.\n\nespero que goste :)
+    \n\nps: te amo muitão
     `);
 });

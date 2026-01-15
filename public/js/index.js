@@ -1,3 +1,15 @@
+
+let periodoAtual = {
+  tipo: 'mes', // 'mes' | 'ano'
+  ano: new Date().getFullYear(),
+  mes: new Date().getMonth() + 1
+};
+
+function atualizarDados(periodo){
+    gastosMes(periodo)
+    buscarGastoTotal(periodo)
+}
+
 function tempo() {
   console.log("Entrei na função tempo")
   valorSelect = document.getElementById('select_tempo').value
@@ -5,33 +17,57 @@ function tempo() {
   const hoje = new Date();
 
   if (valorSelect == "ano") {
-    gastosMes(hoje.getFullYear())
-    buscarGastoTotal(hoje.getFullYear())
+    atualizarDados(hoje.getFullYear())
+    div_ano = document.getElementById('div_ano');
+    visualizaçãoPeriodo.style.display = "none"
+
+    div_ano.innerHTML = 
+    `
+      <select id="anoAnalisado" onchange="periodoAnual()">
+        <option value="#">Selecionar ano</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+      </select>
+      <label>Selecionar o ano</label>
+    `
   }
   else if (valorSelect == "mes") {
     const hoje = new Date();
     ano = hoje.getFullYear();
     mes = hoje.getMonth() + 1;
     tempoAnalisado = { ano, mes }
+    visualizaçãoPeriodo.style.display = ""
+    atualizarDados(tempoAnalisado)
 
-    gastosMes(tempoAnalisado);
-    buscarGastoTotal(tempoAnalisado);
+    div_ano.innerHTML = 
+    `
+       <select id="anoAnalisado" onchange="periodo()">
+          <option value="#">Selecionar ano</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+      </select>
+      <label>Selecionar o ano</label>
+    `
   }
+}
 
+function periodoAnual() {
+  console.log("Entrei na função periodo")
+  valorSelectAno = document.getElementById('anoAnalisado').value
+  ano = Number(valorSelectAno);
+  atualizarDados(ano)
 }
 
 function periodo() {
   console.log("Entrei na função periodo")
-  valorSelect = document.getElementById('select_periodo').value
-  console.log(valorSelect)
+  valorSelectMes = document.getElementById('select_periodo').value
+  valorSelectAno = document.getElementById('anoAnalisado').value
 
   const hoje = new Date();
-  ano = hoje.getFullYear();
-  mes = valorSelect;
+  ano = valorSelectAno;
+  mes = valorSelectMes;
   tempoAnalisado = { ano, mes }
-  gastosMes(tempoAnalisado);
-  buscarGastoTotal(tempoAnalisado);
-
+  atualizarDados(tempoAnalisado)
 }
 
 function gerarInformações() {
@@ -139,7 +175,7 @@ function buscarGastoTotal(periodo) {
           div_percentual.style.display = ""
           div_percentual.style.backgroundColor = corFundo;
           div_percentual.style.color = corTexto
-            div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}%`
+          div_percentual.innerHTML = `<i class='bx  bx-caret-big-up'></i> +${diferença_percentual}%`
           div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
 
         }
@@ -149,7 +185,7 @@ function buscarGastoTotal(periodo) {
           div_percentual.style.display = ""
           div_percentual.style.backgroundColor = corFundo;
           div_percentual.style.color = corTexto
-          
+
           div_percentual.innerHTML = `<i class='bx  bx-caret-big-down'></i> ${diferença_percentual}%`
           div_subtexto.innerHTML = `Em relação a ${typeof periodo === 'object' ? 'mês de ' : 'ano de '} ${labelComparacao}`;
 
@@ -241,7 +277,7 @@ async function gastosMes(param) {
 }
 
 
-function percentualTipo(dataInicial, dataFinal) {
+function percentualTipo(periodo) {
   kpiTipo = document.getElementById('percentualKPItipo')
   valorKPI = document.getElementById('valorKPItipo')
   const dados = [];
@@ -269,7 +305,16 @@ function percentualTipo(dataInicial, dataFinal) {
         series: dados,
         labels: labels,
         fill: {
-          colors: ['#367373', '#5FA8A3', '#9ED2CE', '#7FBCD2', '#A7C7E7']
+          colors: [
+            '#1E4F56', // azul petróleo
+            '#2C6E73', // teal mais escuro
+            '#4F918C', // teal médio
+            '#6FB9B5', // teal claro
+            '#B5E3E0', // gelo suave
+            '#C8ECF0', // azul glacial
+            '#6FAFD6', // azul céu frio
+            '#D8F3F5', // quase branco gelo
+          ]
         },
         plotOptions: {
           pie: {
@@ -307,7 +352,16 @@ function criarGrafico(altura, tipo, nome, dados, labels, div) {
       type: tipo
     },
     fill: {
-      colors: ['#367373', '#5FA8A3', '#9ED2CE', '#7FBCD2', '#A7C7E7']
+          colors: [
+            '#1E4F56', // azul petróleo
+            '#2C6E73', // teal mais escuro
+            '#4F918C', // teal médio
+            '#6FB9B5', // teal claro
+            '#B5E3E0', // gelo suave
+            '#C8ECF0', // azul glacial
+            '#6FAFD6', // azul céu frio
+            '#D8F3F5', // quase branco gelo
+          ]
     },
     series: [{
       name: nome,
@@ -322,12 +376,10 @@ function criarGrafico(altura, tipo, nome, dados, labels, div) {
     },
   };
 
-  // 🔥 destrói gráfico antigo
   if (graficos[div]) {
     graficos[div].destroy();
   }
 
-  // 🆕 cria e guarda o novo gráfico
   graficos[div] = new ApexCharts(
     document.querySelector(`#${div}`),
     options

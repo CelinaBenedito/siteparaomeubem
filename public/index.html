@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+    <link rel="icon" type="image/png" href="assets/glaceonIcon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
@@ -48,6 +49,7 @@
         <div id="main" class="main">
             <h1>Bem Vindo!</h1>
             <button>Ver instituições</button>
+            <p>Período analisado: <span>20/12/2025 - 19/01/2026</span></p>
             <div id="filtros" class="filtros">
                 <div class="campo">
                     <select id="select_tempo" onchange="tempo()">
@@ -56,8 +58,7 @@
                     </select>
                     <label>Selecionar periodo de tempo</label>
                 </div>
-                <div class="campo">
-
+                <div class="campo" id="visualizaçãoPeriodo">
                     <select id="select_periodo" onchange="periodo()">
                         <option value="#">Selecionar Mês</option>
                         <option value="01">Janeiro</option>
@@ -74,9 +75,16 @@
                         <option value="12">Dezembro</option>
                     </select>
 
-                    <label> Selecionar mês</label>
+                    <label id="labelMes"> Selecionar mês</label>
                 </div>
-
+                <div class="campo" id="div_ano">
+                    <select id="anoAnalisado" onchange="periodo()">
+                        <option value="#">Selecionar ano</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                <label>Selecionar o ano</label>
+                </div>
             </div>
             <div class="containerKPIS" id="containerKPIS">
                 <!-- KPI: Gasto Total -->
@@ -94,7 +102,7 @@
                 <!-- KPI: Maior Gasto -->
                 <div class="KPI KPI-maior-gasto">
                     <div>
-                        <p class="kpi-label">Maior gasto do ano</p>
+                        <p class="kpi-label">Maior gasto do <span id="kpiMaiorGastoTitulo">ano</span></p>
                         <p class="categoria-nome" id="categoria">...</p>
                         <p class="valor-destaque" id="valorCategoria">...</p>
                         <p class="subtexto" id="tituloGasto"
@@ -108,10 +116,10 @@
 
                     <div class="impacto-container">
                         <div>
-                            <span class="impactoKPI" id="percentualKPItipo">Transporte</span>
+                            <span class="impactoKPI" id="percentualKPItipo">...</span>
                         </div>
                         <div style="text-align: right;">
-                            <span class="valorKPItipo" id="valorKPItipo">34%</span>
+                            <span class="valorKPItipo" id="valorKPItipo">...</span>
                             <p class="subtexto" style="font-weight: 700; text-transform: uppercase; font-size: 10px;">do
                                 total</p>
                         </div>
